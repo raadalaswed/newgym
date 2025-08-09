@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تمارين اليوم</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #0d0d0d; color: white; padding-bottom: 60px; }
+    main { max-width: 900px; margin: auto; padding: 1rem; }
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #dc2626; /* Tailwind red-600 */
+      padding-bottom: 0.25rem;
+    }
+    .exercise-card {
+      background-color: #1f2937; /* Tailwind gray-800 */
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgb(220 38 38 / 0.5);
+      transition: transform 0.2s ease;
+    }
+    .exercise-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgb(220 38 38 / 0.7);
+    }
+    .exercise-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 0.5rem;
+      object-fit: cover;
+      border: 2px solid #dc2626;
+      flex-shrink: 0;
+    }
+    .exercise-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .exercise-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .exercise-sets {
+      color: #9ca3af; /* Tailwind gray-400 */
+      font-size: 0.9rem;
+    }
+    .btn-video {
+      background-color: #dc2626;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      width: max-content;
+      font-weight: 600;
+    }
+    .btn-video:hover {
+      background-color: #ef4444; /* Tailwind red-500 */
+    }
+    input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      accent-color: #dc2626;
+      flex-shrink: 0;
+    }
+
+    /* Modal styles */
+    #videoModal {
+      position: fixed;
+      top: 0; left: 0; right:0; bottom:0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    #videoModal.active {
+      display: flex;
+    }
+    #videoModal iframe {
+      width: 100%;
+      max-width: 720px;
+      height: 405px;
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 20px #dc2626;
+      background: black;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      font-weight: 900;
+      line-height: 1;
+      padding: 0 0.5rem;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="bg-red-600 p-4 text-center text-xl font-bold">
+    🏋️‍♂️ تمارين اليوم
+  </header>
+
+  <main>
+    <!-- تمارين الجسم الأعلى -->
+    <section aria-labelledby="upper-body-title" class="mb-8">
+      <h2 id="upper-body-title" class="section-title">تمارين الجسم الأعلى</h2>
+
+      <div class="exercise-card">
+        <img src="images/a.jpg.jpg" alt="بنج برس اعلى جهاز جالس" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">بنج برس اعلى جهاز جالس</h3>
+          <p class="exercise-sets">8 ثم 8 ثم 6 ثم 6 شفتات</p>
+          <button class="btn-video" onclick="openVideo('LIE4DvUEX0I')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين بنج برس اعلى جهاز جالس" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/b.jpg" alt="بنج برس متسوي وسط" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">بنج برس متسوي وسط سمث</h3>
+          <p class="exercise-sets">8 ثم 8 ثم 6 ثم 6 شفتات</p>
+          <button class="btn-video" onclick="openVideo('vmcMeevJlw0')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين بنج برس متسوي وسط سمث" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/c.jpg" alt="جمع اسلاك للاسفل" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">جمع اسلاك للاسفل</h3>
+          <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
+          <button class="btn-video" onclick="openVideo('weDXMR14hsE')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين جمع اسلاك للاسفل" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/d.jpg" alt="سحب بكرة امامي عريض" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">سحب بكرة امامي عريض</h3>
+          <p class="exercise-sets">10 ثم 8 ثم 8 ثم 6 شفتات</p>
+          <button class="btn-video" onclick="openVideo('BssZPuGoYlc')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين سحب بكرة امامي عريض" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/e.jpg" alt="سحب بكرة متكا على الصدر وسط" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">سحب بكرة متكا على الصدر وسط</h3>
+          <p class="exercise-sets">10 ثم 8 ثم 8 ثم 6 شفتات</p>
+          <button class="btn-video" onclick="openVideo('3l8NuxwaLXM')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين سحب بكرة متكا على الصدر وسط" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/f.jpg" alt="كيل حديد واقف" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">كيل حديد واقف وسط</h3>
+          <p class="exercise-sets">8 ثم 6 ثم 6 ثم 4 شفتات</p>
+          <button class="btn-video" onclick="openVideo('iLanHIOb5KU')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين كيل حديد واقف وسط" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/g.jpg" alt="كيل دمبلس مترادف واقف" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">كيل دمبلس مترادف واقف</h3>
+          <p class="exercise-sets">8 ثم 8 ثم 8 ثم 8 شفتات</p>
+          <button class="btn-video" onclick="openVideo('ERWxBXTT-1Y')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين كيل دمبلس مترادف واقف" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/h.jpg" alt="ساعد" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">ساعد</h3>
+          <p class="exercise-sets">12 ثم 12 ثم 12 ثم 12 شفتات</p>
+          <button class="btn-video" onclick="openVideo('4GKxBnZWyrQ')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين ساعد" />
+      </div>
+    </section>
+
+    <!-- تمارين الجسم الأسفل -->
+    <section aria-labelledby="lower-body-title" class="mb-8">
+      <h2 id="lower-body-title" class="section-title">تمارين الجسم الأسفل</h2>
+
+      <div class="exercise-card">
+        <img src="images/i.jpg" alt="رفع الجذع" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">رفع الجذع</h3>
+          <p class="exercise-sets">25 ثم 25 ثم 25 ثم 25 شفتات</p>
+          <button class="btn-video" onclick="openVideo('MbuQRcLnBbI')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين رفع الجذع" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/j.jpg" alt="رفع الساق" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">رفع الساق</h3>
+          <p class="exercise-sets">25 ثم 25 ثم 25 ثم 25 شفتات</p>
+          <button class="btn-video" onclick="openVideo('wDYU9e4XTec')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين رفع الساق" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/k.jpg" alt="لف الماكنة" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">لف الماكنة</h3>
+          <p class="exercise-sets">10 ثم 10 ثم 10 شفتات</p>
+          <button class="btn-video" onclick="openVideo('iSOpWtl2x6c')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين لف الماكنة" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/l.jpg" alt="برس امامي وسط جالس" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">برس امامي وسط جالس</h3>
+          <p class="exercise-sets">8 ثم 6 ثم 6 ثم 4 شفتات</p>
+          <button class="btn-video" onclick="openVideo('SjRR-yd3Aag')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين برس امامي وسط جالس" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/m.jpg" alt="شد بكرة للامام مفرد واقف" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">شد بكرة للامام مفرد واقف</h3>
+          <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
+          <button class="btn-video" onclick="openVideo('rY4ZJfrZUxI')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين شد بكرة للامام مفرد واقف" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/n.jpg" alt="شد جهاز خلفي" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">شد جهاز خلفي</h3>
+          <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
+          <button class="btn-video" onclick="openVideo('RK1m3oUfzZw')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين شد جهاز خلفي" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/o.jpg" alt="تراي جهاز زد جالس ضيق" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">تراي جهاز زد جالس ضيق</h3>
+          <p class="exercise-sets">8 ثم 8 ثم 6 ثم 6 شفتات</p>
+          <button class="btn-video" onclick="openVideo('j_TFp51mb98')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين تراي جهاز زد جالس ضيق" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/p.jpg" alt="تراي دمبلس اليدين معا" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">تراي دمبلس اليدين معا</h3>
+          <p class="exercise-sets">8 ثم 8 ثم 8 ثم 8 شفتات</p>
+          <button class="btn-video" onclick="openVideo('bSTspYuMQEQ')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين تراي دمبلس اليدين معا" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/q.jpg" alt="تراي سيقان امامي" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">تراي سيقان امامي</h3>
+          <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
+          <button class="btn-video" onclick="openVideo('yveu3PY7by0')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين تراي سيقان امامي" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/r.jpg" alt="هاك باك وسط" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">هاك باك وسط</h3>
+          <p class="exercise-sets">8 ثم 8 ثم 8 ثم 8 شفتات</p>
+          <button class="btn-video" onclick="openVideo('D5VJdkIeJyg')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين هاك باك وسط" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/s.jpg" alt="كولف" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">كولف</h3>
+          <p class="exercise-sets">20 ثم 20 ثم 20 ثم 20 شفتات</p>
+          <button class="btn-video" onclick="openVideo('aoU01n5S2j4')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين كولف" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/t.jpg" alt="ساعد" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">ساعد</h3>
+          <p class="exercise-sets">12 ثم 12 ثم 12 ثم 12 شفتات</p>
+          <button class="btn-video" onclick="openVideo('4GKxBnZWyrQ')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين ساعد" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/u.jpg" alt="طحن جهاز" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">طحن جهاز</h3>
+          <p class="exercise-sets">30 ثم 30 ثم 30 ثم 30 شفتات</p>
+          <button class="btn-video" onclick="openVideo('aX5Af_qhemI')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين طحن جهاز" />
+      </div>
+
+      <div class="exercise-card">
+        <img src="images/v.jpg" alt="لف الماكنة" class="exercise-img" />
+        <div class="exercise-info">
+          <h3 class="exercise-name">لف الماكنة</h3>
+          <p class="exercise-sets">30 ثم 30 ثم 30 ثم 30 شفتات</p>
+          <button class="btn-video" onclick="openVideo('iSOpWtl2x6c')">شاهد الفيديو</button>
+        </div>
+        <input type="checkbox" aria-label="تم الانتهاء من تمرين لف الماكنة" />
+      </div>
+    </section>
+  </main>
+
+  <!-- نافذة الفيديو -->
+  <div id="videoModal" role="dialog" aria-modal="true" aria-label="فيديو التمرين">
+    <button class="close-btn" onclick="closeVideo()" aria-label="إغلاق الفيديو">&times;</button>
+  </div>
+
+  <!-- شريط التنقل -->
+  <nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
+    <a href="index.html" class="text-white" aria-label="الرئيسية">🏠</a>
+    <a href="workouts.html" class="text-white" aria-label="التمارين">🏋️‍♂️</a>
+    <a href="meals.html" class="text-white" aria-label="الوجبات">🍽️</a>
+    <a href="stats.html" class="text-white" aria-label="الإحصائيات">📊</a>
+    <a href="profile.html" class="text-white" aria-label="الملف الشخصي">👤</a>
+  </nav>
+
+  <script>
+    function openVideo(videoId) {
+      const modal = document.getElementById('videoModal');
+      modal.innerHTML = `
+        <button class="close-btn" onclick="closeVideo()" aria-label="إغلاق الفيديو">&times;</button>
+        <iframe
+          src="https://www.youtube.com/embed/${videoId}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="فيديو تمرين"
+        ></iframe>
+      `;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeVideo() {
+      const modal = document.getElementById('videoModal');
+      modal.classList.remove('active');
+      modal.innerHTML = '';
+      document.body.style.overflow = 'auto';
+    }
+  </script>
+
+</body>
+</html>

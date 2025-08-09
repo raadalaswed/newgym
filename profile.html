@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملفي الشخصي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #0d0d0d; color: white; padding-bottom: 80px; }
+  </style>
+</head>
+<body>
+
+  <header class="bg-red-600 p-4 text-center text-xl font-bold">
+    👤 ملفك الشخصي
+  </header>
+
+  <main class="p-4 space-y-4">
+    <div class="text-center">
+      <img src="images/user.png" alt="User" class="w-24 h-24 mx-auto rounded-full border-4 border-red-500" />
+      <h2 class="text-xl font-bold mt-2">رعد الأسود</h2>
+    </div>
+
+    <div class="bg-gray-800 p-4 rounded">
+      <p><span class="text-gray-400">الوزن الحالي:</span> 90 كغ</p>
+      <p><span class="text-gray-400">الطول:</span> 180 سم</p>
+      <p><span class="text-gray-400">الهدف:</span> عضلات مع تنشيف</p>
+    </div>
+
+    <button class="bg-red-500 hover:bg-red-400 w-full p-3 rounded text-white">✏️ تعديل البيانات</button>
+  </main>
+
+  <div class="fixed bottom-12 w-full text-center px-4">
+    <p class="text-green-400 font-semibold text-lg">استمر بقوة! العضلات لا تبنى بالراحة، بل بالعزيمة والإصرار 💪🔥</p>
+  </div>
+
+  <nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
+    <a href="index.html" class="text-white">🏠</a>
+    <a href="workouts.html" class="text-white">🏋️‍♂️</a>
+    <a href="meals.html" class="text-white">🍽️</a>
+    <a href="stats.html" class="text-white">📊</a>
+    <a href="profile.html" class="text-white">👤</a>
+  </nav>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html> 
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الوجبات - نظام التنشيف وزيادة العضلات</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&family=Tajawal&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: white;
+      padding-bottom: 120px;
+      font-family: 'Tajawal', 'Cairo', sans-serif;
+    }
+    .tab-button {
+      transition: background-color 0.3s ease;
+    }
+    .tab-button.active {
+      background-color: #ef4444; /* Tailwind red-500 */
+      color: white;
+      font-weight: 700;
+    }
+    .meal-item:hover {
+      background-color: #292929;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .description {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    /* لإخفاء/إظهار الوصف */
+    .hidden-desc {
+      display: none;
+    }
+    /* نصائح التغذية */
+    #nutrition-tips {
+      background-color: #1f2937; /* Tailwind gray-800 */
+      padding: 12px 20px;
+      margin-top: 40px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #f9fafb; /* Tailwind gray-50 */
+    }
+    /* تقسيم الوجبات حسب أوقات اليوم */
+    .meal-time {
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #f87171; /* Tailwind red-400 */
+      font-size: 1rem;
+      border-bottom: 1px solid #ef4444;
+      padding-bottom: 2px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="bg-red-600 p-4 text-center text-xl font-bold">
+    🍽️ وجبات اليوم - نظام التنشيف وزيادة العضلات
+  </header>
+
+  <main class="p-4">
+
+    <!-- تبويبات التنقل بين الأنظمة -->
+    <div class="flex justify-center gap-3 mb-6">
+      <button onclick="showMenu(1)" id="btn1" class="tab-button px-4 py-2 rounded bg-red-500 text-white">النظام 1</button>
+      <button onclick="showMenu(2)" id="btn2" class="tab-button px-4 py-2 rounded bg-gray-700 text-white hover:bg-red-500">النظام 2</button>
+      <button onclick="showMenu(3)" id="btn3" class="tab-button px-4 py-2 rounded bg-gray-700 text-white hover:bg-red-500">النظام 3</button>
+      <button onclick="showMenu(4)" id="btn4" class="tab-button px-4 py-2 rounded bg-gray-700 text-white hover:bg-red-500">النظام 4</button>
+    </div>
+
+    <!-- النظام 1 -->
+    <ul id="menu1" class="space-y-3">
+      <div class="meal-time">فطور</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 1: بياض بيض (150غ) + تمر (3 حبات) + تفاح</span>
+          <span class="text-red-400">350 كالوري</span>
+        </div>
+        <p class="description hidden-desc">وجبة غنية بالبروتين والسكريات الطبيعية للطاقة. التمر غني بالبوتاسيوم والتفاح بالألياف.</p>
+      </li>
+
+      <div class="meal-time">قبل التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 2: صدر دجاج مشوي (150غ) + أرز بني (120غ) + خضار مشوية</span>
+          <span class="text-red-400">450 كالوري</span>
+        </div>
+        <p class="description hidden-desc">البروتين مع الكربوهيدرات المعقدة يوفر طاقة مستمرة أثناء التمرين.</p>
+      </li>
+
+      <div class="meal-time">بعد التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 3: سلطة تونة (100غ) + خبز بر (2 شريحة)</span>
+          <span class="text-red-400">400 كالوري</span>
+        </div>
+        <p class="description hidden-desc">بروتين عالي الجودة لتعويض العضلات + كربوهيدرات للانتعاش.</p>
+      </li>
+
+      <div class="meal-time">وجبة خفيفة</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 4: زبادي يوناني (150غ) + مكسرات (30غ)</span>
+          <span class="text-red-400">300 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر جيد للدهون الصحية والبروبيوتيك لصحة الجهاز الهضمي.</p>
+      </li>
+
+      <div class="meal-time">عشاء</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 5: سمك مشوي (150غ) + بطاطا مسلوقة (150غ)</span>
+          <span class="text-red-400">500 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر أوميغا 3 والبروتين مع نشويات سهلة الهضم في المساء.</p>
+      </li>
+    </ul>
+
+    <!-- النظام 2 -->
+    <ul id="menu2" class="space-y-3 hidden">
+      <div class="meal-time">فطور</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 1: بيضتان مسلوقتان + خبز بر (2 شريحة) + موزة</span>
+          <span class="text-red-400">320 كالوري</span>
+        </div>
+        <p class="description hidden-desc">بروتين وكربوهيدرات بسيطة لمزيد من الطاقة.</p>
+      </li>
+
+      <div class="meal-time">قبل التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 2: لحم بقري قليل الدهن (150غ) + أرز بني (120غ)</span>
+          <span class="text-red-400">480 كالوري</span>
+        </div>
+        <p class="description hidden-desc">بروتين عالي مع كربوهيدرات معقدة لدعم التمرين.</p>
+      </li>
+
+      <div class="meal-time">بعد التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 3: سلطة حمص (100غ) + خضار طازجة (100غ)</span>
+          <span class="text-red-400">350 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر بروتين نباتي مع الألياف لتعزيز الهضم.</p>
+      </li>
+
+      <div class="meal-time">وجبة خفيفة</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 4: جبن قريش (100غ) + خيار وطماطم (100غ)</span>
+          <span class="text-red-400">280 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر بروتين ومنخفض السعرات.</p>
+      </li>
+
+      <div class="meal-time">عشاء</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 5: صدر دجاج مشوي (150غ) + كينوا (120غ)</span>
+          <span class="text-red-400">510 كالوري</span>
+        </div>
+        <p class="description hidden-desc">بروتين مع كربوهيدرات كاملة لتعزيز الشبع والعضلات.</p>
+      </li>
+    </ul>
+
+    <!-- النظام 3 -->
+    <ul id="menu3" class="space-y-3 hidden">
+      <div class="meal-time">فطور</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 1: عصير بروتين مع موز (250 مل + 1 موزة)</span>
+          <span class="text-red-400">330 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر سريع للبروتين والكربوهيدرات قبل التمرين.</p>
+      </li>
+
+      <div class="meal-time">قبل التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 2: سمك سلمون (150غ) + خضار مشوية (150غ)</span>
+          <span class="text-red-400">520 كالوري</span>
+        </div>
+        <p class="description hidden-desc">أوميغا 3 وبروتين وكربوهيدرات صحية.</p>
+      </li>
+
+      <div class="meal-time">بعد التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 3: سلطة تونة (100غ) مع زيت زيتون (ملعقة)</span>
+          <span class="text-red-400">400 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر بروتين صحي ودهون جيدة لتعزيز التعافي.</p>
+      </li>
+
+      <div class="meal-time">وجبة خفيفة</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 4: لبن زبادي (150غ) + توت (100غ)</span>
+          <span class="text-red-400">290 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر للبروتين والكالسيوم مع مضادات الأكسدة.</p>
+      </li>
+
+      <div class="meal-time">عشاء</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 5: صدر دجاج (150غ) + بطاطا مسلوقة (150غ)</span>
+          <span class="text-red-400">480 كالوري</span>
+        </div>
+        <p class="description hidden-desc">بروتين نشوي متوازن للهضم قبل النوم.</p>
+      </li>
+    </ul>
+
+    <!-- النظام 4 -->
+    <ul id="menu4" class="space-y-3 hidden">
+      <div class="meal-time">فطور</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 1: برتقال + لبن (250 مل)</span>
+          <span class="text-red-400">340 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر فيتامين سي وحليب غني بالكالسيوم.</p>
+      </li>
+
+      <div class="meal-time">قبل التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 2: لحم بقري قليل الدهن (150غ) + أرز بني (120غ)</span>
+          <span class="text-red-400">470 كالوري</span>
+        </div>
+        <p class="description hidden-desc">طاقة بطيئة الإفراز وبروتين.</p>
+      </li>
+
+      <div class="meal-time">بعد التمرين</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 3: سلطة خضراء مع خيار وطماطم + زيت زيتون (ملعقة)</span>
+          <span class="text-red-400">350 كالوري</span>
+        </div>
+        <p class="description hidden-desc">فيتامينات وألياف مع دهون صحية.</p>
+      </li>
+
+      <div class="meal-time">وجبة خفيفة</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 4: زبادي يوناني (150غ) + مكسرات (30غ)</span>
+          <span class="text-red-400">300 كالوري</span>
+        </div>
+        <p class="description hidden-desc">مصدر للدهون الصحية والبروتين.</p>
+      </li>
+
+      <div class="meal-time">عشاء</div>
+      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
+        <div class="flex justify-between items-center">
+          <span>وجبة 5: سمك أبيض مشوي (150غ) + خضار مسلوقة (150غ)</span>
+          <span class="text-red-400">490 كالوري</span>
+        </div>
+        <p class="description hidden-desc">بروتين عالي الجودة مع ألياف خفيفة.</p>
+      </li>
+    </ul>
+
+    <!-- قسم النصائح العامة -->
+    <section id="nutrition-tips" dir="rtl">
+      <h3 class="font-bold mb-2 text-red-400 text-center">نصائح عامة للتغذية والتمرين</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li>يفضل تناول الوجبة التي قبل التمرين قبل حوالي 60-90 دقيقة.</li>
+        <li>تناول وجبة بعد التمرين خلال 30-45 دقيقة لتعزيز التعافي.</li>
+        <li>شرب كمية كافية من الماء طوال اليوم للحفاظ على الترطيب.</li>
+        <li>تناول الفواكه الطازجة يومياً مثل التفاح، الموز، البرتقال لتعزيز الطاقة والألياف.</li>
+        <li>تجنب الوجبات الثقيلة قبل النوم بساعتين على الأقل.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
+    <a href="index.html" class="text-white" aria-label="الرئيسية">🏠</a>
+    <a href="workouts.html" class="text-white" aria-label="التمارين">🏋️‍♂️</a>
+    <a href="meals.html" class="text-white" aria-label="الوجبات">🍽️</a>
+    <a href="stats.html" class="text-white" aria-label="الإحصائيات">📊</a>
+    <a href="profile.html" class="text-white" aria-label="الملف الشخصي">👤</a>
+  </nav>
+
+  <script>
+    // التحكم بعرض القوائم (التبويبات)
+    function showMenu(menuNumber) {
+      for(let i=1; i<=4; i++) {
+        document.getElementById('menu' + i).classList.add('hidden');
+        document.getElementById('btn' + i).classList.remove('bg-red-500');
+        document.getElementById('btn' + i).classList.add('bg-gray-700');
+      }
+      document.getElementById('menu' + menuNumber).classList.remove('hidden');
+      document.getElementById('btn' + menuNumber).classList.add('bg-red-500');
+      document.getElementById('btn' + menuNumber).classList.remove('bg-gray-700');
+    }
+
+    // إظهار وإخفاء وصف الوجبة عند النقر
+    function toggleDesc(element) {
+      const desc = element.querySelector('.description');
+      if (desc.classList.contains('hidden-desc')) {
+        desc.classList.remove('hidden-desc');
+      } else {
+        desc.classList.add('hidden-desc');
+      }
+    }
+  </script>
+
+</body>
+</html>
