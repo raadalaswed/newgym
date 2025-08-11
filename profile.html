@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تعديل الملف الشخصي</title>
+  <title>تعديل الملف الشخصي - Firebase</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#0d0d0d] text-white font-sans pt-16 pb-20">
@@ -59,50 +59,58 @@
     <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
   </nav>
 
-  <!-- مكتبة Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-  <script>
-    // إعدادات supabase
-    const SUPABASE_URL = 'https://nefpdoctzdkrgpyxnjaf.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZnBkb2N0emRrcmdweXhuamFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4NzYzNjcsImV4cCI6MjA3MDQ1MjM2N30.ubSmkZ3eu8N5MCZwlq3DW-3hi2DqNF-bbG0e0qxiD6k';
+  <!-- Firebase SDKs -->
+  <script type="module">
+    // استيراد الوظائف المطلوبة من Firebase SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // إعدادات Firebase (ضع الإعدادات الخاصة بك هنا)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
+      authDomain: "garag-system.firebaseapp.com",
+      databaseURL: "https://garag-system-default-rtdb.firebaseio.com",
+      projectId: "garag-system",
+      storageBucket: "garag-system.firebasestorage.app",
+      messagingSenderId: "330947022055",
+      appId: "1:330947022055:web:ce96293502f40d2645a642"
+    };
+
+    // تهيئة Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
     const form = document.getElementById('profileForm');
     const displayData = document.getElementById('displayData');
 
-    // دالة لعرض البيانات في الصفحة
+    // عرض البيانات في الصفحة
     function showUserData(user) {
       displayData.textContent = `الاسم: ${user.username} — الطول: ${user.height} سم — الوزن: ${user.weight} كغ`;
     }
 
-    // تحميل البيانات عند فتح الصفحة
+    // تحميل البيانات من Firebase عند تحميل الصفحة
     async function loadProfile() {
-      const { data, error } = await supabase
-        .from('users')
-        .select('username, height, weight')
-        .limit(1);
-
-      if (error) {
+      try {
+        const dbRef = ref(db);
+        const snapshot = await get(child(dbRef, 'profile'));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          form.username.value = data.username || '';
+          form.height.value = data.height || '';
+          form.weight.value = data.weight || '';
+          showUserData(data);
+        } else {
+          displayData.textContent = 'لا توجد بيانات محفوظة حالياً.';
+        }
+      } catch (error) {
         console.error('خطأ في تحميل البيانات:', error);
         displayData.textContent = 'حدث خطأ أثناء تحميل البيانات.';
-        return;
-      }
-
-      if (data.length > 0) {
-        const user = data[0];
-        form.username.value = user.username || '';
-        form.height.value = user.height || '';
-        form.weight.value = user.weight || '';
-        showUserData(user);
-      } else {
-        displayData.textContent = 'لا توجد بيانات محفوظة حالياً.';
       }
     }
 
     loadProfile();
 
-    // حدث حفظ البيانات عند إرسال الفورم
+    // حفظ البيانات إلى Firebase عند الإرسال
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -115,25 +123,18 @@
         return;
       }
 
-      // حذف البيانات القديمة (لتبسيط النموذج)
-      const { error: delError } = await supabase.from('users').delete().neq('id', '');
-      if (delError) {
-        alert('حدث خطأ أثناء حذف البيانات القديمة.');
-        console.error('خطأ في الحذف:', delError);
-        return;
-      }
-
-      // إدخال البيانات الجديدة
-      const { data, error } = await supabase.from('users').insert([{ username, height, weight }]);
-      if (error) {
+      try {
+        await set(ref(db, 'profile'), {
+          username,
+          height,
+          weight
+        });
+        showUserData({ username, height, weight });
+        alert('تم حفظ البيانات بنجاح!');
+      } catch (error) {
+        console.error('خطأ في حفظ البيانات:', error);
         alert('حدث خطأ أثناء حفظ البيانات.');
-        console.error('خطأ في الإدخال:', error);
-        return;
       }
-
-      showUserData({ username, height, weight });
-
-      alert('تم حفظ البيانات بنجاح!');
     });
   </script>
 
