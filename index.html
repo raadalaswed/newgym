@@ -108,29 +108,37 @@
       responseBox.innerHTML = "⏳ جاري المعالجة...";
 
       try {
-        const res = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2", {
+        const res = await fetch("https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct", {
           method: "POST",
           headers: {
             "Authorization": "Bearer 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",
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            inputs: `الرجاء الإجابة على السؤال التالي باللغة العربية الواضحة والمختصرة:\n\n${question}`
+            inputs: `أجب عن السؤال التالي باللغة العربية:\n\n${question}`
           })
         });
 
         const data = await res.json();
-        if (Array.isArray(data) && data.length > 0 && data[0].generated_text) {
-          // إذا كان الرد في generated_text
-          responseBox.innerHTML = `<span class='text-green-400'>💡 الإجابة:</span> ${data[0].generated_text}`;
+        console.log("📥 رد API:", data);
+
+        let answer = "";
+
+        if (Array.isArray(data) && data[0]?.generated_text) {
+          answer = data[0].generated_text.replace(question, "").trim();
         } else if (data.generated_text) {
-          // بعض النماذج ترجعها مباشرة
-          responseBox.innerHTML = `<span class='text-green-400'>💡 الإجابة:</span> ${data.generated_text}`;
+          answer = data.generated_text.replace(question, "").trim();
+        } else if (Array.isArray(data) && data[0]?.output_text) {
+          answer = data[0].output_text.trim();
+        }
+
+        if (answer) {
+          responseBox.innerHTML = `<span class='text-green-400'>💡 الإجابة:</span> ${answer}`;
         } else {
-          responseBox.innerHTML = "<span class='text-yellow-400'>⚠️ لم أتمكن من الحصول على إجابة.</span>";
+          responseBox.innerHTML = "<span class='text-yellow-400'>⚠️ لم أتمكن من الحصول على إجابة من الموديل.</span>";
         }
       } catch (err) {
-        console.error(err);
+        console.error("❌ خطأ:", err);
         responseBox.innerHTML = "<span class='text-red-400'>❌ حدث خطأ في الاتصال.</span>";
       }
     }
