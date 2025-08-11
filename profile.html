@@ -12,27 +12,14 @@
       padding-bottom: 80px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding-top: 60px; /* مساحة لعبارة رعد الأسود */
+      padding-top: 60px;
     }
-
-    /* أنيميشن بسيطة للعبارة */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     .footer-text {
       animation: fadeInUp 1.5s ease forwards;
       opacity: 0;
       font-weight: 600;
       font-size: 0.9rem;
-      color: #f87171; /* نفس لون الأحمر الفاتح */
+      color: #f87171;
       position: fixed;
       top: 0;
       left: 0;
@@ -44,61 +31,22 @@
       box-shadow: 0 2px 5px rgba(248,113,113,0.5);
       user-select: none;
     }
-
-    /* تأثير أزرار متقدمة */
-    .btn-modern {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
-      transition: all 0.3s ease;
-      font-weight: 700;
-      font-size: 1.1rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 15px;
-      padding: 1.5rem 1rem;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .btn-modern:hover {
-      background: linear-gradient(135deg, #b91c1c, #ef4444);
-      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.7);
-      transform: scale(1.05);
-    }
-
-    .btn-modern span.emoji {
-      font-size: 2.5rem;
-      margin-bottom: 0.4rem;
-    }
-
-    /* تظليل عند التركيز لتجربة أفضل */
-    .btn-modern:focus-visible {
-      outline: 3px solid #f87171;
-      outline-offset: 3px;
-    }
-
-    /* تنسيق صفحة الملف الشخصي */
     main.profile-main {
       padding: 20px;
       max-width: 400px;
       margin: 0 auto;
     }
-
     main.profile-main label, main.profile-main input, main.profile-main button {
       display: block;
       width: 100%;
       margin-bottom: 15px;
       font-size: 1rem;
     }
-
     main.profile-main input {
       padding: 10px;
       border-radius: 6px;
       border: none;
     }
-
     main.profile-main button {
       padding: 12px;
       background-color: #ef4444;
@@ -109,11 +57,16 @@
       font-weight: 700;
       transition: background-color 0.3s ease;
     }
-
     main.profile-main button:hover {
       background-color: #b91c1c;
     }
-
+    #displayName {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #f87171;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -131,9 +84,10 @@
     <input type="text" id="username" placeholder="اكتب اسمك هنا" autocomplete="off" />
 
     <button id="saveBtn">حفظ التغييرات</button>
+
+    <div id="displayName"></div>
   </main>
 
-  <!-- شريط التنقل -->
   <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70">
     <a href="index.html" class="text-white hover:text-red-300 transition" aria-label="الرئيسية">🏠</a>
     <a href="workouts.html" class="text-white hover:text-red-300 transition" aria-label="التمارين">🏋️‍♂️</a>
@@ -142,7 +96,6 @@
     <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
   </nav>
 
-  <!-- مكتبة Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <script>
     const SUPABASE_URL = 'https://nefpdoctzdkrgpyxnjaf.supabase.co';
@@ -152,8 +105,9 @@
 
     const input = document.getElementById('username');
     const saveBtn = document.getElementById('saveBtn');
+    const displayName = document.getElementById('displayName');
 
-    // تحميل أول اسم مستخدم مسجل إذا وجد
+    // تحميل أول اسم مسجل إذا وجد وعرضه
     async function loadUsername() {
       const { data, error } = await supabase
         .from('users')
@@ -167,12 +121,15 @@
       }
       if (data.length > 0) {
         input.value = data[0].username;
+        displayName.textContent = `الاسم الحالي: ${data[0].username}`;
+      } else {
+        displayName.textContent = 'لا يوجد اسم مستخدم محفوظ حالياً.';
       }
     }
 
     loadUsername();
 
-    // حفظ الاسم الجديد
+    // حفظ الاسم الجديد وعرضه فوراً
     saveBtn.onclick = async () => {
       const username = input.value.trim();
       if (!username) {
@@ -180,8 +137,14 @@
         return;
       }
 
-      // حذف البيانات القديمة (لتبسيط المثال)
-      await supabase.from('users').delete().neq('id', '');
+      // حذف كل البيانات القديمة (لتبسيط المثال)
+      const { error: delError } = await supabase.from('users').delete().neq('id', '');
+
+      if (delError) {
+        console.error(delError);
+        alert('حدث خطأ أثناء حذف البيانات القديمة');
+        return;
+      }
 
       // إدخال اسم المستخدم الجديد
       const { data, error } = await supabase
@@ -192,6 +155,7 @@
         console.error(error);
         alert('حدث خطأ أثناء الحفظ');
       } else {
+        displayName.textContent = `الاسم الحالي: ${username}`;
         alert('تم حفظ الاسم بنجاح!');
       }
     };
