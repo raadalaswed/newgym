@@ -9,31 +9,23 @@
     body {
       background-color: #0d0d0d;
       color: white;
-      padding-bottom: 80px;
+      padding-bottom: 120px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* أنيميشن بسيطة للعبارة */
     @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
     .footer-text {
       animation: fadeInUp 1.5s ease forwards;
       opacity: 0;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #f87171; /* نفس لون الأحمر الفاتح */
+      font-weight: 700;
+      font-size: 1rem;
+      color: #f87171;
     }
 
-    /* تأثير أزرار متقدمة */
     .btn-modern {
       background: linear-gradient(135deg, #ef4444, #b91c1c);
       box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
@@ -60,12 +52,6 @@
       font-size: 2.5rem;
       margin-bottom: 0.4rem;
     }
-
-    /* تظليل عند التركيز لتجربة أفضل */
-    .btn-modern:focus-visible {
-      outline: 3px solid #f87171;
-      outline-offset: 3px;
-    }
   </style>
 </head>
 <body>
@@ -78,38 +64,76 @@
     <h1 class="text-3xl font-extrabold mb-5 text-center text-red-400 drop-shadow-md">مرحباً بك في تطبيق تماريني</h1>
     <p class="mb-8 text-center text-gray-300 text-lg">اختر القسم الذي تريد التوجه إليه لتبدأ رحلتك نحو اللياقة والعضلات</p>
 
-    <div class="grid grid-cols-2 gap-6 max-w-md mx-auto">
-      <a href="workouts.html" class="btn-modern" aria-label="التمارين">
-        <span class="emoji">🏋️‍♂️</span>
-        التمارين
-      </a>
-      <a href="meals.html" class="btn-modern" aria-label="الوجبات">
-        <span class="emoji">🍽️</span>
-        الوجبات
-      </a>
-      <a href="stats.html" class="btn-modern" aria-label="الإحصائيات">
-        <span class="emoji">📊</span>
-        الإحصائيات
-      </a>
-      <a href="profile.html" class="btn-modern" aria-label="الملف الشخصي">
-        <span class="emoji">👤</span>
-        الملف الشخصي
-      </a>
+    <!-- أزرار الأقسام -->
+    <div class="grid grid-cols-2 gap-6 max-w-md mx-auto mb-10">
+      <a href="workouts.html" class="btn-modern"><span class="emoji">🏋️‍♂️</span>التمارين</a>
+      <a href="meals.html" class="btn-modern"><span class="emoji">🍽️</span>الوجبات</a>
+      <a href="stats.html" class="btn-modern"><span class="emoji">📊</span>الإحصائيات</a>
+      <a href="profile.html" class="btn-modern"><span class="emoji">👤</span>الملف الشخصي</a>
+    </div>
+
+    <!-- خانة الأسئلة -->
+    <div class="max-w-xl mx-auto bg-gray-900 p-5 rounded-2xl shadow-lg border border-red-700">
+      <h2 class="text-xl font-bold mb-3 text-red-400">💬 اسأل الذكاء الاصطناعي</h2>
+      <textarea id="userQuestion" rows="3" placeholder="اكتب سؤالك هنا..." class="w-full p-3 rounded-lg text-black focus:outline-none"></textarea>
+      <button onclick="askAI()" class="mt-3 w-full bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-lg">إرسال</button>
+      <div id="aiResponse" class="mt-4 text-gray-300 whitespace-pre-wrap"></div>
     </div>
   </main>
 
-  <footer class="fixed bottom-14 w-full text-center">
+  <!-- رفع العبارة للأعلى -->
+  <footer class="fixed bottom-24 w-full text-center">
     <p class="footer-text select-none">تم صنع الموقع بواسطة رعد الأسود</p>
   </footer>
 
   <!-- شريط التنقل -->
   <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70">
-    <a href="index.html" class="text-white hover:text-red-300 transition" aria-label="الرئيسية">🏠</a>
-    <a href="workouts.html" class="text-white hover:text-red-300 transition" aria-label="التمارين">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white hover:text-red-300 transition" aria-label="الوجبات">🍽️</a>
-    <a href="stats.html" class="text-white hover:text-red-300 transition" aria-label="الإحصائيات">📊</a>
-    <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
+    <a href="index.html" class="text-white hover:text-red-300 transition">🏠</a>
+    <a href="workouts.html" class="text-white hover:text-red-300 transition">🏋️‍♂️</a>
+    <a href="meals.html" class="text-white hover:text-red-300 transition">🍽️</a>
+    <a href="stats.html" class="text-white hover:text-red-300 transition">📊</a>
+    <a href="profile.html" class="text-white hover:text-red-300 transition">👤</a>
   </nav>
 
+  <script>
+    async function askAI() {
+      const question = document.getElementById("userQuestion").value.trim();
+      const responseBox = document.getElementById("aiResponse");
+
+      if (!question) {
+        responseBox.innerHTML = "<span class='text-red-400'>⚠️ الرجاء كتابة سؤال أولاً.</span>";
+        return;
+      }
+
+      responseBox.innerHTML = "⏳ جاري المعالجة...";
+
+      try {
+        const res = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer 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",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            inputs: `الرجاء الإجابة على السؤال التالي باللغة العربية الواضحة والمختصرة:\n\n${question}`
+          })
+        });
+
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0 && data[0].generated_text) {
+          // إذا كان الرد في generated_text
+          responseBox.innerHTML = `<span class='text-green-400'>💡 الإجابة:</span> ${data[0].generated_text}`;
+        } else if (data.generated_text) {
+          // بعض النماذج ترجعها مباشرة
+          responseBox.innerHTML = `<span class='text-green-400'>💡 الإجابة:</span> ${data.generated_text}`;
+        } else {
+          responseBox.innerHTML = "<span class='text-yellow-400'>⚠️ لم أتمكن من الحصول على إجابة.</span>";
+        }
+      } catch (err) {
+        console.error(err);
+        responseBox.innerHTML = "<span class='text-red-400'>❌ حدث خطأ في الاتصال.</span>";
+      }
+    }
+  </script>
 </body>
 </html>
