@@ -5,90 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تعديل الملف الشخصي</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background-color: #0d0d0d;
-      color: white;
-      padding-bottom: 80px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding-top: 60px;
-    }
-    .footer-text {
-      animation: fadeInUp 1.5s ease forwards;
-      opacity: 0;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #f87171;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      background: #111;
-      padding: 10px 0;
-      z-index: 1000;
-      box-shadow: 0 2px 5px rgba(248,113,113,0.5);
-      user-select: none;
-    }
-    main.profile-main {
-      padding: 20px;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    main.profile-main label, main.profile-main input, main.profile-main button {
-      display: block;
-      width: 100%;
-      margin-bottom: 15px;
-      font-size: 1rem;
-    }
-    main.profile-main input {
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-    }
-    main.profile-main button {
-      padding: 12px;
-      background-color: #ef4444;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: background-color 0.3s ease;
-    }
-    main.profile-main button:hover {
-      background-color: #b91c1c;
-    }
-    #displayName {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      color: #f87171;
-      text-align: center;
-      font-weight: bold;
-    }
-  </style>
 </head>
-<body>
+<body class="bg-[#0d0d0d] text-white font-sans pt-16 pb-20">
 
-  <p class="footer-text">تم صنع الموقع بواسطة رعد الأسود</p>
+  <p class="fixed top-0 left-0 w-full bg-[#111] text-[#f87171] text-center py-2 font-semibold shadow-md select-none z-50">
+    تم صنع الموقع بواسطة رعد الأسود
+  </p>
 
-  <header class="bg-red-700 p-5 text-center text-2xl font-extrabold tracking-wide drop-shadow-lg shadow-red-700/80">
+  <header class="bg-red-700 p-5 text-center text-2xl font-extrabold tracking-wide drop-shadow-lg shadow-red-700/80 mb-8">
     💪 تماريني
   </header>
 
-  <main class="profile-main">
-    <h1 class="text-3xl font-extrabold mb-5 text-center text-red-400 drop-shadow-md">تعديل الملف الشخصي</h1>
+  <main class="max-w-md mx-auto px-4">
 
-    <label for="username">اسم المستخدم:</label>
-    <input type="text" id="username" placeholder="اكتب اسمك هنا" autocomplete="off" />
+    <h1 class="text-3xl font-extrabold mb-6 text-center text-red-400 drop-shadow-md">تعديل الملف الشخصي</h1>
 
-    <button id="saveBtn">حفظ التغييرات</button>
+    <form id="profileForm" class="space-y-5">
 
-    <div id="displayName"></div>
+      <div>
+        <label for="username" class="block mb-1 font-semibold">اسم المستخدم:</label>
+        <input id="username" type="text" placeholder="اكتب اسمك هنا" autocomplete="off"
+          class="w-full rounded-md p-3 bg-[#222] text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+      </div>
+
+      <div>
+        <label for="height" class="block mb-1 font-semibold">الطول (سم):</label>
+        <input id="height" type="number" min="50" max="300" placeholder="مثلاً: 170"
+          class="w-full rounded-md p-3 bg-[#222] text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+      </div>
+
+      <div>
+        <label for="weight" class="block mb-1 font-semibold">الوزن (كغ):</label>
+        <input id="weight" type="number" min="20" max="500" placeholder="مثلاً: 70"
+          class="w-full rounded-md p-3 bg-[#222] text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+      </div>
+
+      <button type="submit"
+        class="w-full bg-red-600 hover:bg-red-700 transition rounded-md p-3 font-bold text-white cursor-pointer">
+        حفظ التغييرات
+      </button>
+    </form>
+
+    <div id="displayData" class="mt-8 text-center text-red-400 font-semibold text-lg"></div>
+
   </main>
 
-  <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70">
+  <nav
+    class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70 z-40">
     <a href="index.html" class="text-white hover:text-red-300 transition" aria-label="الرئيسية">🏠</a>
     <a href="workouts.html" class="text-white hover:text-red-300 transition" aria-label="التمارين">🏋️‍♂️</a>
     <a href="meals.html" class="text-white hover:text-red-300 transition" aria-label="الوجبات">🍽️</a>
@@ -96,69 +59,75 @@
     <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
   </nav>
 
+  <!-- مكتبة Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
   <script>
     const SUPABASE_URL = 'https://nefpdoctzdkrgpyxnjaf.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZnBkb2N0emRrcmdweXhuamFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4NzYzNjcsImV4cCI6MjA3MDQ1MjM2N30.ubSmkZ3eu8N5MCZwlq3DW-3hi2DqNF-bbG0e0qxiD6k';
+    const SUPABASE_ANON_KEY =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZnBkb2N0emRrcmdweXhuamFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4NzYzNjcsImV4cCI6MjA3MDQ1MjM2N30.ubSmkZ3eu8N5MCZwlq3DW-3hi2DqNF-bbG0e0qxiD6k';
 
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const input = document.getElementById('username');
-    const saveBtn = document.getElementById('saveBtn');
-    const displayName = document.getElementById('displayName');
+    const form = document.getElementById('profileForm');
+    const displayData = document.getElementById('displayData');
 
-    // تحميل أول اسم مسجل إذا وجد وعرضه
-    async function loadUsername() {
+    // جلب البيانات وعرضها
+    async function loadProfile() {
       const { data, error } = await supabase
         .from('users')
-        .select('username')
+        .select('username, height, weight')
         .limit(1);
 
       if (error) {
         console.error(error);
-        alert('حدث خطأ أثناء تحميل البيانات');
+        displayData.textContent = 'حدث خطأ أثناء تحميل البيانات.';
         return;
       }
+
       if (data.length > 0) {
-        input.value = data[0].username;
-        displayName.textContent = `الاسم الحالي: ${data[0].username}`;
+        const user = data[0];
+        form.username.value = user.username || '';
+        form.height.value = user.height || '';
+        form.weight.value = user.weight || '';
+        displayData.textContent = `الاسم: ${user.username} — الطول: ${user.height} سم — الوزن: ${user.weight} كغ`;
       } else {
-        displayName.textContent = 'لا يوجد اسم مستخدم محفوظ حالياً.';
+        displayData.textContent = 'لا توجد بيانات محفوظة حالياً.';
       }
     }
 
-    loadUsername();
+    loadProfile();
 
-    // حفظ الاسم الجديد وعرضه فوراً
-    saveBtn.onclick = async () => {
-      const username = input.value.trim();
-      if (!username) {
-        alert('يرجى إدخال اسم صحيح');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = form.username.value.trim();
+      const height = parseInt(form.height.value);
+      const weight = parseInt(form.weight.value);
+
+      if (!username || !height || !weight) {
+        alert('يرجى تعبئة جميع الحقول بشكل صحيح.');
         return;
       }
 
-      // حذف كل البيانات القديمة (لتبسيط المثال)
+      // حذف البيانات القديمة (تبسيط)
       const { error: delError } = await supabase.from('users').delete().neq('id', '');
-
       if (delError) {
+        alert('حدث خطأ أثناء حذف البيانات القديمة.');
         console.error(delError);
-        alert('حدث خطأ أثناء حذف البيانات القديمة');
         return;
       }
 
-      // إدخال اسم المستخدم الجديد
-      const { data, error } = await supabase
-        .from('users')
-        .insert([{ username }]);
-
+      // إدخال البيانات الجديدة
+      const { data, error } = await supabase.from('users').insert([{ username, height, weight }]);
       if (error) {
+        alert('حدث خطأ أثناء حفظ البيانات.');
         console.error(error);
-        alert('حدث خطأ أثناء الحفظ');
-      } else {
-        displayName.textContent = `الاسم الحالي: ${username}`;
-        alert('تم حفظ الاسم بنجاح!');
+        return;
       }
-    };
+
+      displayData.textContent = `الاسم: ${username} — الطول: ${height} سم — الوزن: ${weight} كغ`;
+      alert('تم حفظ البيانات بنجاح!');
+    });
   </script>
 
 </body>
