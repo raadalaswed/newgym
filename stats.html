@@ -88,7 +88,7 @@
     // يمكنك تعديله حسب حاجتك
     function getDayType(dayIndex) {
       // لنفترض: يوم 1 تمرين, يوم 2 استراحة, يوم 3 استراحة, ثم يعاد النمط
-      const pattern = ['تمرين', 'استراحة', 'استراحة'];
+      const pattern = ['تمرين', 'تمرين', 'استراحة'];
       return pattern[(dayIndex - 1) % pattern.length];
     }
 
@@ -169,3 +169,4 @@
   </script>
 </body>
 </html>
+
