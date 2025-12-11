@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>تماريني</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     body {
       background-color: #0d0d0d;
@@ -16,6 +15,7 @@
       padding-top: 60px; /* مساحة لعبارة رعد الأسود */
     }
 
+    /* أنيميشن بسيطة للعبارة */
     @keyframes fadeInUp {
       0% {
         opacity: 0;
@@ -32,7 +32,7 @@
       opacity: 0;
       font-weight: 600;
       font-size: 0.9rem;
-      color: #f87171;
+      color: #f87171; /* نفس لون الأحمر الفاتح */
       position: fixed;
       top: 0;
       left: 0;
@@ -45,6 +45,7 @@
       user-select: none;
     }
 
+    /* تأثير أزرار متقدمة */
     .btn-modern {
       background: linear-gradient(135deg, #ef4444, #b91c1c);
       box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
@@ -72,13 +73,13 @@
       margin-bottom: 0.4rem;
     }
 
+    /* تظليل عند التركيز لتجربة أفضل */
     .btn-modern:focus-visible {
       outline: 3px solid #f87171;
       outline-offset: 3px;
     }
   </style>
 </head>
-
 <body>
 
   <p class="footer-text">تم صنع الموقع بواسطة رعد الأسود</p>
@@ -92,56 +93,33 @@
     <p class="mb-8 text-center text-gray-300 text-lg">اختر القسم الذي تريد التوجه إليه لتبدأ رحلتك نحو اللياقة والعضلات</p>
 
     <div class="grid grid-cols-2 gap-6 max-w-md mx-auto">
-      <a href="workouts.html" class="btn-modern"><span class="emoji">🏋️‍♂️</span>التمارين</a>
-      <a href="meals.html" class="btn-modern"><span class="emoji">🍽️</span>الوجبات</a>
-      <a href="stats.html" class="btn-modern"><span class="emoji">📊</span>الإحصائيات</a>
-      <a href="profile.html" class="btn-modern"><span class="emoji">👤</span>الملف الشخصي</a>
+      <a href="workouts.html" class="btn-modern" aria-label="التمارين">
+        <span class="emoji">🏋️‍♂️</span>
+        التمارين
+      </a>
+      <a href="meals.html" class="btn-modern" aria-label="الوجبات">
+        <span class="emoji">🍽️</span>
+        الوجبات
+      </a>
+      <a href="stats.html" class="btn-modern" aria-label="الإحصائيات">
+        <span class="emoji">📊</span>
+        الإحصائيات
+      </a>
+      <a href="profile.html" class="btn-modern" aria-label="الملف الشخصي">
+        <span class="emoji">👤</span>
+        الملف الشخصي
+      </a>
     </div>
-
-    <!-- خانة إدخال محمية من XSS -->
-    <div class="max-w-md mx-auto mt-10 bg-gray-900 p-5 rounded-2xl shadow-lg">
-      <label for="safeInput" class="text-red-400 font-bold text-lg block mb-2">
-        🔒 أدخل نصاً (محمي من XSS)
-      </label>
-
-      <input id="safeInput"
-            type="text"
-            placeholder="اكتب أي نص..."
-            class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-red-500 focus:outline-none">
-
-      <button id="safeBtn"
-              class="mt-4 w-full bg-red-600 p-3 rounded-lg font-bold hover:bg-red-700 transition">
-        عرض النص بأمان
-      </button>
-
-      <p id="safeResult" class="text-center text-red-300 mt-4 font-semibold"></p>
-    </div>
-
   </main>
 
   <!-- شريط التنقل -->
   <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70">
-    <a href="index.html" class="text-white hover:text-red-300 transition">🏠</a>
-    <a href="workouts.html" class="text-white hover:text-red-300 transition">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white hover:text-red-300 transition">🍽️</a>
-    <a href="stats.html" class="text-white hover:text-red-300 transition">📊</a>
-    <a href="profile.html" class="text-white hover:text-red-300 transition">👤</a>
+    <a href="index.html" class="text-white hover:text-red-300 transition" aria-label="الرئيسية">🏠</a>
+    <a href="workouts.html" class="text-white hover:text-red-300 transition" aria-label="التمارين">🏋️‍♂️</a>
+    <a href="meals.html" class="text-white hover:text-red-300 transition" aria-label="الوجبات">🍽️</a>
+    <a href="stats.html" class="text-white hover:text-red-300 transition" aria-label="الإحصائيات">📊</a>
+    <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
   </nav>
-
-  <!-- سكربت حماية XSS -->
-  <script>
-    function sanitize(input) {
-      return input.replace(/[<>\/"'`;(){}]/g, "");
-    }
-
-    document.getElementById("safeBtn").addEventListener("click", () => {
-      const raw = document.getElementById("safeInput").value;
-      const clean = sanitize(raw);
-
-      document.getElementById("safeResult").textContent =
-        "الناتج الآمن: " + clean;
-    });
-  </script>
 
 </body>
 </html>
