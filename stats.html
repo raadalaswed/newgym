@@ -5,168 +5,232 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الإحصائيات</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    body { background-color: #0d0d0d; color: white; padding-bottom: 60px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #555; padding: 10px; text-align: center; }
+    body {
+      background-color: #0d0d0d;
+      color: white;
+      padding-bottom: 60px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #555;
+      padding: 10px;
+      text-align: center;
+    }
     th { background-color: #b91c1c; }
     td { background-color: #222; }
-    .checkbox-cell {
-      cursor: pointer;
-    }
+    .checkbox-cell { cursor: pointer; }
+    .safe { color: #4ade80; }
+    .danger { color: #f87171; }
   </style>
 </head>
 <body>
 
-  <header class="bg-red-600 p-4 text-center text-xl font-bold">
-    📊 إحصائياتك
-  </header>
+<header class="bg-red-600 p-4 text-center text-xl font-bold">
+  📊 إحصائياتك
+</header>
 
-  <main class="p-4 max-w-lg mx-auto">
+<main class="p-4 max-w-lg mx-auto">
 
-    <div class="bg-gray-800 p-4 rounded mb-4">
-      <h2 class="font-bold text-lg mb-2">الوزن الحالي</h2>
-      <p id="currentWeight" class="text-red-400 text-xl">90 كغ</p>
-    </div>
+  <!-- 🔐 اختيار المستخدم (أربع مستخدمين ثابتين) -->
+  <div class="bg-gray-800 p-4 rounded mb-4">
+    <h2 class="font-bold text-lg mb-2">اختر المستخدم</h2>
+    <select id="userSelect" class="w-full p-2 rounded bg-gray-900 border border-gray-600">
+      <option value="raad">رعد</option>
+      <option value="noor">نور الحسين</option>
+      <option value="maryam">مريم</option>
+      <option value="hassan">حسن</option>
+    </select>
+  </div>
 
-    <div class="bg-gray-800 p-4 rounded mb-4">
-      <h2 class="font-bold text-lg mb-2">عدد التمارين هذا الأسبوع</h2>
-      <p id="workoutsCount" class="text-green-400 text-xl">5 / 7 أيام</p>
-    </div>
+  <!-- 🔍 خانة البحث الآمنة -->
+  <div class="bg-gray-800 p-4 rounded mb-4">
+    <h2 class="font-bold text-lg mb-2">بحث عن مستخدم</h2>
 
-    <div class="bg-gray-800 p-4 rounded mb-4">
-      <h2 class="font-bold text-lg mb-2">السعرات المستهلكة اليوم</h2>
-      <p id="caloriesToday" class="text-yellow-400 text-xl">2,400 كالوري</p>
-    </div>
+    <input 
+      id="searchInput" 
+      type="text"
+      placeholder="اكتب اسم المستخدم…" 
+      class="w-full p-2 rounded bg-gray-900 border border-gray-600"
+    />
 
-    <h2 class="text-center text-red-400 text-2xl font-bold mt-6">برنامج التمارين الشهري</h2>
-    <table id="scheduleTable" aria-label="جدول برنامج التمارين الشهري">
-      <thead>
-        <tr>
-          <th>اليوم</th>
-          <th>التاريخ</th>
-          <th>نوع اليوم</th>
-          <th>تم الإنجاز</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- سيتم ملء الجدول عبر جافاسكريبت -->
-      </tbody>
-    </table>
+    <p id="searchMessage" class="mt-2 text-sm"></p>
+  </div>
 
-  </main>
+  <div class="bg-gray-800 p-4 rounded mb-4">
+    <h2 class="font-bold text-lg mb-2">الوزن الحالي</h2>
+    <p id="currentWeight" class="text-red-400 text-xl">90 كغ</p>
+  </div>
 
-  <nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
-    <a href="index.html" class="text-white" aria-label="الرئيسية">🏠</a>
-    <a href="workouts.html" class="text-white" aria-label="التمارين">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white" aria-label="الوجبات">🍽️</a>
-    <a href="stats.html" class="text-white" aria-label="الإحصائيات">📊</a>
-    <a href="profile.html" class="text-white" aria-label="الملف الشخصي">👤</a>
-  </nav>
+  <div class="bg-gray-800 p-4 rounded mb-4">
+    <h2 class="font-bold text-lg mb-2">عدد التمارين هذا الأسبوع</h2>
+    <p id="workoutsCount" class="text-green-400 text-xl">5 / 7 أيام</p>
+  </div>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+  <div class="bg-gray-800 p-4 rounded mb-4">
+    <h2 class="font-bold text-lg mb-2">السعرات المستهلكة اليوم</h2>
+    <p id="caloriesToday" class="text-yellow-400 text-xl">2,400 كالوري</p>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
-      authDomain: "garag-system.firebaseapp.com",
-      databaseURL: "https://garag-system-default-rtdb.firebaseio.com",
-      projectId: "garag-system",
-      storageBucket: "garag-system.firebasestorage.app",
-      messagingSenderId: "330947022055",
-      appId: "1:330947022055:web:ce96293502f40d2645a642"
-    };
+  <h2 class="text-center text-red-400 text-2xl font-bold mt-6">برنامج التمارين الشهري</h2>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  <table id="scheduleTable" aria-label="جدول برنامج التمارين الشهري">
+    <thead>
+      <tr>
+        <th>اليوم</th>
+        <th>التاريخ</th>
+        <th>نوع اليوم</th>
+        <th>تم الإنجاز</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-    const scheduleTableBody = document.querySelector("#scheduleTable tbody");
+</main>
 
-    // تحديد نوع اليوم (تمرین أو استراحة) حسب نمط: يوم تمرين ثم يومين استراحة
-    // يمكنك تعديله حسب حاجتك
-    function getDayType(dayIndex) {
-      // لنفترض: يوم 1 تمرين, يوم 2 استراحة, يوم 3 استراحة, ثم يعاد النمط
-      const pattern = ['تمرين', 'تمرين', 'استراحة'];
-      return pattern[(dayIndex - 1) % pattern.length];
+<nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
+  <a href="index.html" class="text-white">🏠</a>
+  <a href="workouts.html" class="text-white">🏋️‍♂️</a>
+  <a href="meals.html" class="text-white">🍽️</a>
+  <a href="stats.html" class="text-white">📊</a>
+  <a href="profile.html" class="text-white">👤</a>
+</nav>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
+    authDomain: "garag-system.firebaseapp.com",
+    databaseURL: "https://garag-system-default-rtdb.firebaseio.com",
+    projectId: "garag-system",
+    storageBucket: "garag-system.firebasestorage.app",
+    messagingSenderId: "330947022055",
+    appId: "1:330947022055:web:ce96293502f40d2645a642"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const scheduleTableBody = document.querySelector("#scheduleTable tbody");
+
+  /* 🔐 قائمة المستخدمين الثابتة */
+  const allowedUsers = ["raad", "noor", "maryam", "hassan"];
+
+  /* 🔐 دالة Sanitization لمنع XSS */
+  function sanitizeInput(input) {
+    return input.replace(/[<>/"'&;]/g, "");
+  }
+
+  /* 🔍 بحث آمن */
+  const searchInput = document.getElementById("searchInput");
+  const searchMessage = document.getElementById("searchMessage");
+
+  searchInput.addEventListener("input", () => {
+    let clean = sanitizeInput(searchInput.value.trim());
+
+    if (clean !== searchInput.value) {
+      searchMessage.textContent = "🚫 تم إزالة رموز خطيرة محتملة (XSS)";
+      searchMessage.className = "danger mt-2 text-sm";
+      searchInput.value = clean;
+      return;
     }
 
-    // دالة للحصول على تاريخ بصيغة YYYY-MM-DD أو بالعربي
-    function formatDate(date) {
-      // صيغة عربية: يوم/شهر/سنة
-      return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'numeric', day: 'numeric' });
+    if (allowedUsers.includes(clean.toLowerCase())) {
+      searchMessage.textContent = "✔ المستخدم موجود";
+      searchMessage.className = "safe mt-2 text-sm";
+    } else {
+      searchMessage.textContent = "❌ لا يوجد مستخدم بهذا الاسم";
+      searchMessage.className = "danger mt-2 text-sm";
     }
+  });
 
-    // تحميل بيانات الإنجاز من Firebase
-    async function loadProgress() {
-      const snapshot = await get(ref(db, 'workoutProgress'));
-      return snapshot.exists() ? snapshot.val() : {};
+  /* 🔄 تحميل حالة إنجاز التمارين */
+  async function loadProgress(user) {
+    const snapshot = await get(ref(db, `users/${user}/workoutProgress`));
+    return snapshot.exists() ? snapshot.val() : {};
+  }
+
+  /* 💾 حفظ الإنجاز */
+  async function saveProgress(user, progress) {
+    await set(ref(db, `users/${user}/workoutProgress`), progress);
+  }
+
+  /* 🔧 تحديد نوع اليوم */
+  function getDayType(dayIndex) {
+    const pattern = ["تمرين", "تمرين", "استراحة"];
+    return pattern[(dayIndex - 1) % pattern.length];
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString("ar-EG", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric"
+    });
+  }
+
+  /* 🏗️ بناء جدول الشهر */
+  async function buildSchedule() {
+    const user = document.getElementById("userSelect").value;
+    const progress = await loadProgress(user);
+
+    scheduleTableBody.innerHTML = "";
+
+    const today = new Date();
+
+    for (let day = 1; day <= 30; day++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + day - 1);
+
+      const tr = document.createElement("tr");
+
+      const tdDay = document.createElement("td");
+      tdDay.textContent = `اليوم ${day}`;
+
+      const tdDate = document.createElement("td");
+      tdDate.textContent = formatDate(date);
+
+      const tdType = document.createElement("td");
+      tdType.textContent = getDayType(day);
+
+      const tdCheckbox = document.createElement("td");
+      tdCheckbox.classList.add("checkbox-cell");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+
+      const key = `day${day}`;
+      checkbox.checked = progress[key] === true;
+
+      checkbox.addEventListener("change", async () => {
+        progress[key] = checkbox.checked;
+        await saveProgress(user, progress);
+      });
+
+      tdCheckbox.appendChild(checkbox);
+
+      tr.appendChild(tdDay);
+      tr.appendChild(tdDate);
+      tr.appendChild(tdType);
+      tr.appendChild(tdCheckbox);
+
+      scheduleTableBody.appendChild(tr);
     }
+  }
 
-    // حفظ بيانات الإنجاز في Firebase
-    async function saveProgress(progress) {
-      await set(ref(db, 'workoutProgress'), progress);
-    }
+  document.getElementById("userSelect").addEventListener("change", buildSchedule);
 
-    // بناء الجدول مع تحميل البيانات وحفظ العلامات
-    async function buildSchedule() {
-      const progress = await loadProgress();
+  buildSchedule();
+</script>
 
-      scheduleTableBody.innerHTML = ''; // مسح المحتوى القديم
-
-      const today = new Date();
-
-      for (let day = 1; day <= 30; day++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + day - 1); // التاريخ لكل يوم
-
-        const dayType = getDayType(day);
-
-        // إنشاء صف جديد
-        const tr = document.createElement('tr');
-
-        // اليوم (رقم)
-        const tdDay = document.createElement('td');
-        tdDay.textContent = `اليوم ${day}`;
-        tr.appendChild(tdDay);
-
-        // التاريخ
-        const tdDate = document.createElement('td');
-        tdDate.textContent = formatDate(date);
-        tr.appendChild(tdDate);
-
-        // نوع اليوم (تمرين أو استراحة)
-        const tdType = document.createElement('td');
-        tdType.textContent = dayType;
-        tr.appendChild(tdType);
-
-        // خانة علامة صح (checkbox)
-        const tdCheckbox = document.createElement('td');
-        tdCheckbox.classList.add('checkbox-cell');
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.setAttribute('aria-label', `تم الإنجاز لليوم ${day} بتاريخ ${formatDate(date)}`);
-
-        // التحقق من حالة الإنجاز المحفوظة
-        const key = `day${day}`;
-        checkbox.checked = progress[key] === true;
-
-        checkbox.addEventListener('change', async () => {
-          progress[key] = checkbox.checked;
-          await saveProgress(progress);
-        });
-
-        tdCheckbox.appendChild(checkbox);
-        tr.appendChild(tdCheckbox);
-
-        scheduleTableBody.appendChild(tr);
-      }
-    }
-
-    buildSchedule();
-  </script>
 </body>
 </html>
-
