@@ -1,187 +1,89 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>الإحصائيات</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    body {
-      background-color: #0d0d0d;
-      color: white;
-      padding-bottom: 60px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #555; padding: 10px; text-align: center; }
-    th { background-color: #b91c1c; }
-    td { background-color: #222; }
-  </style>
+    <meta charset="UTF-8">
+    <title>الإحصاءات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background: #f2f2f2;
+            padding: 30px;
+        }
+        .box {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        input {
+            padding: 8px 14px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            width: 220px;
+        }
+        .label {
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .value {
+            margin-top: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
 </head>
-
 <body>
 
-<header class="bg-red-600 p-4 text-center text-xl font-bold">
-  📊 إحصائيات المستخدمين
-</header>
+    <h1>📊 صفحة الإحصاءات</h1>
 
-<main class="p-4 max-w-lg mx-auto">
+    <!-- إدخال الوزن -->
+    <div class="box">
+        <div class="label">أدخل وزنك الحالي (كغم):</div>
+        <input type="text" id="weightInput" placeholder="مثال: 78">
+        <div class="value" id="weightValue">—</div>
+    </div>
 
-  <!-- 🔍 بحث آمن عن المستخدمين -->
-  <div class="bg-gray-800 p-4 rounded-lg mb-5">
-    <h2 class="font-bold text-lg mb-2 text-red-400">🔎 البحث عن مستخدم (خانة آمنة ضد XSS)</h2>
+    <!-- إدخال السعرات -->
+    <div class="box">
+        <div class="label">أدخل السعرات المتناولة اليوم:</div>
+        <input type="text" id="calInput" placeholder="مثال: 2300">
+        <div class="value" id="calValue">—</div>
+    </div>
 
-    <input id="searchInput"
-           type="text"
-           placeholder="اكتب اسم المستخدم..."
-           class="w-full p-3 rounded-lg bg-gray-900 border border-gray-700 focus:border-red-500 focus:outline-none">
+    <!-- إدخال عدد التمارين -->
+    <div class="box">
+        <div class="label">عدد التمارين المنجزة اليوم:</div>
+        <input type="text" id="exInput" placeholder="مثال: 6">
+        <div class="value" id="exValue">—</div>
+    </div>
 
-    <button id="searchBtn"
-            class="mt-3 w-full bg-red-600 p-3 rounded-lg font-bold hover:bg-red-700 transition">
-      بحث
-    </button>
-
-    <p id="searchMessage" class="text-center mt-3 text-red-300"></p>
-  </div>
-
-  <!-- 👤 بيانات المستخدم المختار -->
-  <div id="userStatsBox" class="hidden bg-gray-800 p-4 rounded-lg">
-
-    <h2 class="font-bold text-xl text-center text-red-400 mb-4" id="userTitle"></h2>
-
-    <label class="block mb-2 font-bold">الوزن (كغ)</label>
-    <input id="weightInput" type="number"
-           class="w-full p-3 mb-4 bg-gray-900 border border-gray-700 rounded-lg">
-
-    <label class="block mb-2 font-bold">عدد التمارين هذا الأسبوع</label>
-    <input id="workoutsInput" type="number"
-           class="w-full p-3 mb-4 bg-gray-900 border border-gray-700 rounded-lg">
-
-    <label class="block mb-2 font-bold">السعرات المستهلكة اليوم</label>
-    <input id="caloriesInput" type="number"
-           class="w-full p-3 mb-4 bg-gray-900 border border-gray-700 rounded-lg">
-
-    <button id="saveBtn"
-            class="w-full bg-green-600 p-3 rounded-lg font-bold hover:bg-green-700 transition">
-      💾 حفظ التعديلات
-    </button>
-
-    <p id="saveMessage" class="text-center font-bold mt-3"></p>
-  </div>
-
-</main>
-
-<!-- شريط التنقل -->
-<nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
-  <a href="index.html" class="text-white">🏠</a>
-  <a href="workouts.html" class="text-white">🏋️‍♂️</a>
-  <a href="meals.html" class="text-white">🍽️</a>
-  <a href="stats.html" class="text-white">📊</a>
-  <a href="profile.html" class="text-white">👤</a>
-</nav>
-
-<!-- 🔥 Firebase + الكود الأمني -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
-    authDomain: "garag-system.firebaseapp.com",
-    databaseURL: "https://garag-system-default-rtdb.firebaseio.com",
-    projectId: "garag-system",
-    storageBucket: "garag-system.firebasestorage.app",
-    messagingSenderId: "330947022055",
-    appId: "1:330947022055:web:ce96293502f40d2645a642"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // 🛡️ دالة إزالة XSS
-  function sanitize(input) {
-    return input.replace(/[<>/"'&;]/g, "");
-  }
-
-  // ✔ المستخدمون الثابتون
-  const users = ["رعد", "نور الحسين", "مريم", "حسن"];
-
-  const searchInput = document.getElementById("searchInput");
-  const searchBtn = document.getElementById("searchBtn");
-  const searchMessage = document.getElementById("searchMessage");
-
-  const userBox = document.getElementById("userStatsBox");
-  const userTitle = document.getElementById("userTitle");
-
-  const weightInput = document.getElementById("weightInput");
-  const workoutsInput = document.getElementById("workoutsInput");
-  const caloriesInput = document.getElementById("caloriesInput");
-
-  const saveBtn = document.getElementById("saveBtn");
-  const saveMessage = document.getElementById("saveMessage");
-
-  let currentUser = null;
-
-  // 🔍 البحث عن مستخدم
-  searchBtn.addEventListener("click", async () => {
-    const raw = searchInput.value;
-    const clean = sanitize(raw);
-
-    const name = clean.trim();
-      document.getElementById("safeBtn").addEventListener("click", () => {
-      const raw = document.getElementById("safeInput").value;
-      const clean = sanitize(raw);
-
-      document.getElementById("safeResult").textContent =
-        "الناتج الآمن: " + clean;
-    }
-    // إذا غير موجود
-    if (!users.includes(name)) {
-      searchMessage.textContent = "❌ المستخدم غير موجود";
-      userBox.classList.add("hidden");
-      return;
+<script>
+    // 🔒 دالة تنظيف المدخلات لمنع XSS (نفسها من index)
+    function sanitizeInput(input) {
+        return input.replace(/[<>/"'&;]/g, "");
     }
 
-    searchMessage.textContent = "✔ تم العثور على المستخدم";
-    currentUser = name;
-
-    userTitle.textContent = "بيانات المستخدم: " + name;
-    userBox.classList.remove("hidden");
-
-    // تحميل بياناته من Firebase
-    const snapshot = await get(ref(db, "gymUsers/" + name));
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      weightInput.value = data.weight;
-      workoutsInput.value = data.workouts;
-      caloriesInput.value = data.calories;
-    } else {
-      weightInput.value = "";
-      workoutsInput.value = "";
-      caloriesInput.value = "";
-    }
-  });
-
-  // 💾 حفظ التعديلات
-  saveBtn.addEventListener("click", async () => {
-    if (!currentUser) return;
-
-    const weight = Number(weightInput.value);
-    const workouts = Number(workoutsInput.value);
-    const calories = Number(caloriesInput.value);
-
-    await set(ref(db, "gymUsers/" + currentUser), {
-      weight,
-      workouts,
-      calories
+    // ★ وزن
+    document.getElementById("weightInput").addEventListener("input", function() {
+        const clean = sanitizeInput(this.value);
+        document.getElementById("weightValue").textContent = "وزنك الحالي: " + clean + " كغم";
     });
 
-    saveMessage.textContent = "✔ تم حفظ التعديلات بنجاح";
-    setTimeout(() => saveMessage.textContent = "", 2000);
-  });
+    // ★ السعرات
+    document.getElementById("calInput").addEventListener("input", function() {
+        const clean = sanitizeInput(this.value);
+        document.getElementById("calValue").textContent = "السعرات اليوم: " + clean;
+    });
+
+    // ★ عدد التمارين
+    document.getElementById("exInput").addEventListener("input", function() {
+        const clean = sanitizeInput(this.value);
+        document.getElementById("exValue").textContent = "عدد التمارين المنجزة: " + clean;
+    });
 </script>
 
 </body>
 </html>
-
