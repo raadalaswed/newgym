@@ -129,7 +129,13 @@
     const clean = sanitize(raw);
 
     const name = clean.trim();
+      document.getElementById("safeBtn").addEventListener("click", () => {
+      const raw = document.getElementById("safeInput").value;
+      const clean = sanitize(raw);
 
+      document.getElementById("safeResult").textContent =
+        "الناتج الآمن: " + clean;
+    }
     // إذا غير موجود
     if (!users.includes(name)) {
       searchMessage.textContent = "❌ المستخدم غير موجود";
@@ -178,3 +184,4 @@
 
 </body>
 </html>
+
