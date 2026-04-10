@@ -6,66 +6,81 @@
   <title>تعديل الملف الشخصي - Firebase</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0d0d0d] text-white font-sans pt-16 pb-20">
 
-  <p class="fixed top-0 left-0 w-full bg-[#111] text-[#f87171] text-center py-2 font-semibold shadow-md select-none z-50">
+<body class="bg-[#0d0d0d] text-white font-sans pt-16 pb-24">
+
+  <!-- 🔥 العنوان العلوي -->
+  <p class="fixed top-0 left-0 w-full bg-[#111] text-[#f87171] text-center py-2 font-semibold shadow-md z-50">
     تم صنع الموقع بواسطة رعد الأسود
   </p>
 
-  <header class="bg-red-700 p-5 text-center text-2xl font-extrabold tracking-wide drop-shadow-lg shadow-red-700/80 mb-8">
-    💪 تماريني
+  <header class="bg-red-700 p-5 text-center text-2xl font-extrabold mb-8">
+    💪 تماريني - الملف الشخصي
   </header>
 
   <main class="max-w-md mx-auto px-4">
 
-    <h1 class="text-3xl font-extrabold mb-6 text-center text-red-400 drop-shadow-md">تعديل الملف الشخصي</h1>
+    <h1 class="text-3xl font-extrabold mb-6 text-center text-red-400">
+      تعديل الملف الشخصي
+    </h1>
 
     <form id="profileForm" class="space-y-5">
 
+      <!-- اسم المستخدم -->
       <div>
-        <label for="username" class="block mb-1 font-semibold">اسم المستخدم:</label>
-        <input id="username" name="username" type="text" placeholder="اكتب اسمك هنا" autocomplete="off"
-          class="w-full rounded-md p-3 bg-[#222] text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+        <label class="block mb-1 font-semibold">اسم المستخدم:</label>
+        <input id="username" type="text"
+          class="w-full p-3 bg-[#222] rounded-md" required />
       </div>
 
+      <!-- الطول -->
       <div>
-        <label for="height" class="block mb-1 font-semibold">الطول (سم):</label>
-        <input id="height" name="height" type="number" min="50" max="300" placeholder="مثلاً: 170"
-          class="w-full rounded-md p-3 bg-[#222] text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+        <label class="block mb-1 font-semibold">الطول (سم):</label>
+        <input id="height" type="number"
+          class="w-full p-3 bg-[#222] rounded-md" required />
       </div>
 
+      <!-- الوزن -->
       <div>
-        <label for="weight" class="block mb-1 font-semibold">الوزن (كغ):</label>
-        <input id="weight" name="weight" type="number" min="20" max="500" placeholder="مثلاً: 70"
-          class="w-full rounded-md p-3 bg-[#222] text-white focus:outline-none focus:ring-2 focus:ring-red-500" required />
+        <label class="block mb-1 font-semibold">الوزن (كغ):</label>
+        <input id="weight" type="number"
+          class="w-full p-3 bg-[#222] rounded-md" required />
       </div>
 
+      <!-- حفظ -->
       <button type="submit"
-        class="w-full bg-red-600 hover:bg-red-700 transition rounded-md p-3 font-bold text-white cursor-pointer">
+        class="w-full bg-red-600 hover:bg-red-700 p-3 font-bold rounded-md">
         حفظ التغييرات
       </button>
     </form>
 
-    <div id="displayData" class="mt-8 text-center text-red-400 font-semibold text-lg"></div>
+    <!-- 🔥 بيانات العرض -->
+    <div id="displayData" class="mt-6 text-center text-red-400 font-bold"></div>
+
+    <!-- 🔥 زر التمرين اليوم (Streak) -->
+    <button id="workoutTodayBtn"
+      class="w-full bg-blue-600 hover:bg-blue-700 p-3 font-bold rounded-md mt-6">
+      💪 سجل تمرين اليوم
+    </button>
+
+    <p id="streakText" class="text-center mt-3 text-yellow-400 font-bold"></p>
 
   </main>
 
-  <nav
-    class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70 z-40">
-    <a href="index.html" class="text-white hover:text-red-300 transition" aria-label="الرئيسية">🏠</a>
-    <a href="workouts.html" class="text-white hover:text-red-300 transition" aria-label="التمارين">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white hover:text-red-300 transition" aria-label="الوجبات">🍽️</a>
-    <a href="stats.html" class="text-white hover:text-red-300 transition" aria-label="الإحصائيات">📊</a>
-    <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
+  <!-- 🔻 شريط التنقل -->
+  <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl z-40">
+    <a href="index.html">🏠</a>
+    <a href="workouts.html">🏋️‍♂️</a>
+    <a href="meals.html">🍽️</a>
+    <a href="stats.html">📊</a>
+    <a href="profile.html">👤</a>
   </nav>
 
-  <!-- Firebase SDKs -->
+  <!-- 🔥 Firebase -->
   <script type="module">
-    // استيراد الوظائف المطلوبة من Firebase SDK
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-    // إعدادات Firebase (ضع الإعدادات الخاصة بك هنا)
     const firebaseConfig = {
       apiKey: "AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
       authDomain: "garag-system.firebaseapp.com",
@@ -76,66 +91,87 @@
       appId: "1:330947022055:web:ce96293502f40d2645a642"
     };
 
-    // تهيئة Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const form = document.getElementById('profileForm');
-    const displayData = document.getElementById('displayData');
+    const form = document.getElementById("profileForm");
+    const displayData = document.getElementById("displayData");
 
-    // عرض البيانات في الصفحة
-    function showUserData(user) {
-      displayData.textContent = `الاسم: ${user.username} — الطول: ${user.height} سم — الوزن: ${user.weight} كغ`;
+    const workoutTodayBtn = document.getElementById("workoutTodayBtn");
+    const streakText = document.getElementById("streakText");
+
+    let currentData = {};
+
+    // 📅 التاريخ
+    function getToday() {
+      return new Date().toISOString().split("T")[0];
     }
 
-    // تحميل البيانات من Firebase عند تحميل الصفحة
-    async function loadProfile() {
-      try {
-        const dbRef = ref(db);
-        const snapshot = await get(child(dbRef, 'profile'));
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          form.username.value = data.username || '';
-          form.height.value = data.height || '';
-          form.weight.value = data.weight || '';
-          showUserData(data);
-        } else {
-          displayData.textContent = 'لا توجد بيانات محفوظة حالياً.';
-        }
-      } catch (error) {
-        console.error('خطأ في تحميل البيانات:', error);
-        displayData.textContent = 'حدث خطأ أثناء تحميل البيانات.';
-      }
-    }
-
-    loadProfile();
-
-    // حفظ البيانات إلى Firebase عند الإرسال
-    form.addEventListener('submit', async (e) => {
+    // 🔥 حفظ البيانات
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const username = form.username.value.trim();
-      const height = parseInt(form.height.value);
-      const weight = parseInt(form.weight.value);
+      const height = Number(form.height.value);
+      const weight = Number(form.weight.value);
 
-      if (!username || !height || !weight) {
-        alert('يرجى تعبئة جميع الحقول بشكل صحيح.');
+      const snapshot = await get(ref(db, "gymUsers/" + username));
+      currentData = snapshot.exists() ? snapshot.val() : {};
+
+      await set(ref(db, "gymUsers/" + username), {
+        ...currentData,
+        username,
+        height,
+        weight
+      });
+
+      displayData.textContent =
+        `الاسم: ${username} - الطول: ${height} سم - الوزن: ${weight} كغ`;
+    });
+
+    // 💪 Streak System
+    workoutTodayBtn.addEventListener("click", async () => {
+      const username = form.username.value.trim();
+      if (!username) return;
+
+      const today = getToday();
+
+      const snapshot = await get(ref(db, "gymUsers/" + username));
+
+      let data = snapshot.exists() ? snapshot.val() : {};
+
+      let streak = data.streak || 0;
+      let lastDate = data.lastWorkoutDate || null;
+
+      if (lastDate === today) {
+        streakText.textContent = "⚠️ سجلت تمرينك اليوم بالفعل";
         return;
       }
 
-      try {
-        await set(ref(db, 'profile'), {
-          username,
-          height,
-          weight
-        });
-        showUserData({ username, height, weight });
-        alert('تم حفظ البيانات بنجاح!');
-      } catch (error) {
-        console.error('خطأ في حفظ البيانات:', error);
-        alert('حدث خطأ أثناء حفظ البيانات.');
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yDate = yesterday.toISOString().split("T")[0];
+
+      if (lastDate === yDate) {
+        streak++;
+      } else {
+        streak = 1;
       }
+
+      await set(ref(db, "gymUsers/" + username), {
+        ...data,
+        streak,
+        lastWorkoutDate: today
+      });
+
+      let msg = "";
+      if (streak >= 7) msg = "🔥 ممتاز جداً! سلسلة قوية!";
+      else if (streak >= 3) msg = "💪 بداية رائعة استمر!";
+      else msg = "🚀 استمر ولا تتوقف!";
+
+      streakText.textContent = `🔥 سلسلة التمرين: ${streak} يوم\n${msg}`;
     });
+
   </script>
 
 </body>
