@@ -13,11 +13,6 @@
       padding-bottom: 60px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #555; padding: 10px; text-align: center; }
-    th { background-color: #b91c1c; }
-    td { background-color: #222; }
   </style>
 </head>
 
@@ -61,9 +56,15 @@
     <input id="weightInput" type="number"
            class="w-full p-2 mb-3 bg-gray-900 border border-gray-700">
 
-    <label>الطول (متر)</label>
+    <!-- 🔥 تم التعديل: الطول بالسنتيمتر -->
+    <label>الطول (سم)</label>
     <input id="heightInput" type="number"
-           class="w-full p-2 mb-3 bg-gray-900 border border-gray-700">
+           placeholder="مثال: 175"
+           class="w-full p-2 mb-2 bg-gray-900 border border-gray-700">
+
+    <p class="text-gray-400 text-sm mb-3">
+      أدخل الطول بالسنتيمتر (مثال: 175 سم)
+    </p>
 
     <label>عدد التمارين</label>
     <input id="workoutsInput" type="number"
@@ -73,7 +74,18 @@
     <input id="caloriesInput" type="number"
            class="w-full p-2 mb-3 bg-gray-900 border border-gray-700">
 
+    <!-- 🔥 BMI -->
     <p id="bmiResult" class="text-center text-yellow-400 font-bold mb-3"></p>
+
+    <!-- 📊 شرح BMI -->
+    <div class="text-sm text-gray-300 text-center mb-3">
+      <p>📊 <b>BMI</b> هو مؤشر كتلة الجسم</p>
+      <p>يستخدم لمعرفة إذا كان وزنك مناسب لطولك</p>
+      <p>🔹 أقل من 18.5 = نحيف</p>
+      <p>🔹 18.5 - 24.9 = طبيعي</p>
+      <p>🔹 25 - 29.9 = وزن زائد</p>
+      <p>🔹 30+ = سمنة</p>
+    </div>
 
     <button id="saveBtn"
             class="w-full bg-green-600 p-3 rounded-lg font-bold">
@@ -126,7 +138,7 @@ const saveMessage = document.getElementById("saveMessage");
 
 let currentUser = null;
 
-// ---------------- عرض المستخدمين (LOOP) ----------------
+// ---------------- عرض المستخدمين ----------------
 users.forEach(user => {
   const div = document.createElement("div");
   div.textContent = user;
@@ -176,9 +188,10 @@ searchBtn.onclick = async () => {
 // ---------------- BMI ----------------
 function calculateBMI() {
   const w = Number(weightInput.value);
-  const h = Number(heightInput.value);
+  const hCm = Number(heightInput.value);
 
-  if (w > 0 && h > 0) {
+  if (w > 0 && hCm > 0) {
+    const h = hCm / 100; // تحويل سم إلى متر
     const bmi = w / (h * h);
 
     let status = "";
