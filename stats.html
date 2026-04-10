@@ -10,7 +10,7 @@
     body {
       background-color: #0d0d0d;
       color: white;
-      padding-bottom: 60px;
+      padding-bottom: 80px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
   </style>
@@ -56,15 +56,10 @@
     <input id="weightInput" type="number"
            class="w-full p-2 mb-3 bg-gray-900 border border-gray-700">
 
-    <!-- 🔥 تم التعديل: الطول بالسنتيمتر -->
     <label>الطول (سم)</label>
     <input id="heightInput" type="number"
            placeholder="مثال: 175"
            class="w-full p-2 mb-2 bg-gray-900 border border-gray-700">
-
-    <p class="text-gray-400 text-sm mb-3">
-      أدخل الطول بالسنتيمتر (مثال: 175 سم)
-    </p>
 
     <label>عدد التمارين</label>
     <input id="workoutsInput" type="number"
@@ -74,17 +69,11 @@
     <input id="caloriesInput" type="number"
            class="w-full p-2 mb-3 bg-gray-900 border border-gray-700">
 
-    <!-- 🔥 BMI -->
     <p id="bmiResult" class="text-center text-yellow-400 font-bold mb-3"></p>
 
-    <!-- 📊 شرح BMI -->
     <div class="text-sm text-gray-300 text-center mb-3">
-      <p>📊 <b>BMI</b> هو مؤشر كتلة الجسم</p>
-      <p>يستخدم لمعرفة إذا كان وزنك مناسب لطولك</p>
-      <p>🔹 أقل من 18.5 = نحيف</p>
-      <p>🔹 18.5 - 24.9 = طبيعي</p>
-      <p>🔹 25 - 29.9 = وزن زائد</p>
-      <p>🔹 30+ = سمنة</p>
+      <p>📊 BMI مؤشر كتلة الجسم</p>
+      <p>18.5-24.9 طبيعي | 25+ زائد | 30+ سمنة</p>
     </div>
 
     <button id="saveBtn"
@@ -97,7 +86,16 @@
 
 </main>
 
-<!-- 🔻 Firebase -->
+<!-- 🔻 شريط التنقل (NEW) -->
+<nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl z-40">
+  <a href="index.html">🏠</a>
+  <a href="workouts.html">🏋️‍♂️</a>
+  <a href="meals.html">🍽️</a>
+  <a href="stats.html">📊</a>
+  <a href="profile.html">👤</a>
+</nav>
+
+<!-- 🔥 Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
@@ -191,7 +189,7 @@ function calculateBMI() {
   const hCm = Number(heightInput.value);
 
   if (w > 0 && hCm > 0) {
-    const h = hCm / 100; // تحويل سم إلى متر
+    const h = hCm / 100;
     const bmi = w / (h * h);
 
     let status = "";
