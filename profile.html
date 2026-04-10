@@ -3,176 +3,237 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تعديل الملف الشخصي - Firebase</title>
+  <title>الملف الشخصي - نظام الالتزام</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
 
-<body class="bg-[#0d0d0d] text-white font-sans pt-16 pb-24">
-
-  <!-- 🔥 العنوان العلوي -->
-  <p class="fixed top-0 left-0 w-full bg-[#111] text-[#f87171] text-center py-2 font-semibold shadow-md z-50">
-    تم صنع الموقع بواسطة رعد الأسود
-  </p>
-
-  <header class="bg-red-700 p-5 text-center text-2xl font-extrabold mb-8">
-    💪 تماريني - الملف الشخصي
-  </header>
-
-  <main class="max-w-md mx-auto px-4">
-
-    <h1 class="text-3xl font-extrabold mb-6 text-center text-red-400">
-      تعديل الملف الشخصي
-    </h1>
-
-    <form id="profileForm" class="space-y-5">
-
-      <!-- اسم المستخدم -->
-      <div>
-        <label class="block mb-1 font-semibold">اسم المستخدم:</label>
-        <input id="username" type="text"
-          class="w-full p-3 bg-[#222] rounded-md" required />
-      </div>
-
-      <!-- الطول -->
-      <div>
-        <label class="block mb-1 font-semibold">الطول (سم):</label>
-        <input id="height" type="number"
-          class="w-full p-3 bg-[#222] rounded-md" required />
-      </div>
-
-      <!-- الوزن -->
-      <div>
-        <label class="block mb-1 font-semibold">الوزن (كغ):</label>
-        <input id="weight" type="number"
-          class="w-full p-3 bg-[#222] rounded-md" required />
-      </div>
-
-      <!-- حفظ -->
-      <button type="submit"
-        class="w-full bg-red-600 hover:bg-red-700 p-3 font-bold rounded-md">
-        حفظ التغييرات
-      </button>
-    </form>
-
-    <!-- 🔥 بيانات العرض -->
-    <div id="displayData" class="mt-6 text-center text-red-400 font-bold"></div>
-
-    <!-- 🔥 زر التمرين اليوم (Streak) -->
-    <button id="workoutTodayBtn"
-      class="w-full bg-blue-600 hover:bg-blue-700 p-3 font-bold rounded-md mt-6">
-      💪 سجل تمرين اليوم
-    </button>
-
-    <p id="streakText" class="text-center mt-3 text-yellow-400 font-bold"></p>
-
-  </main>
-
-  <!-- 🔻 شريط التنقل -->
-  <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl z-40">
-    <a href="index.html">🏠</a>
-    <a href="workouts.html">🏋️‍♂️</a>
-    <a href="meals.html">🍽️</a>
-    <a href="stats.html">📊</a>
-    <a href="profile.html">👤</a>
-  </nav>
-
-  <!-- 🔥 Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
-      authDomain: "garag-system.firebaseapp.com",
-      databaseURL: "https://garag-system-default-rtdb.firebaseio.com",
-      projectId: "garag-system",
-      storageBucket: "garag-system.firebasestorage.app",
-      messagingSenderId: "330947022055",
-      appId: "1:330947022055:web:ce96293502f40d2645a642"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const form = document.getElementById("profileForm");
-    const displayData = document.getElementById("displayData");
-
-    const workoutTodayBtn = document.getElementById("workoutTodayBtn");
-    const streakText = document.getElementById("streakText");
-
-    let currentData = {};
-
-    // 📅 التاريخ
-    function getToday() {
-      return new Date().toISOString().split("T")[0];
+  <style>
+    body {
+      background:#0d0d0d;
+      color:white;
     }
 
-    // 🔥 حفظ البيانات
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    .day {
+      width: 38px;
+      height: 38px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:8px;
+      margin:2px;
+      font-size:12px;
+    }
 
-      const username = form.username.value.trim();
-      const height = Number(form.height.value);
-      const weight = Number(form.weight.value);
+    .green { background:#16a34a; }
+    .red { background:#dc2626; }
+    .gray { background:#374151; }
+  </style>
+</head>
 
-      const snapshot = await get(ref(db, "gymUsers/" + username));
-      currentData = snapshot.exists() ? snapshot.val() : {};
+<body class="pb-24">
 
-      await set(ref(db, "gymUsers/" + username), {
-        ...currentData,
-        username,
-        height,
-        weight
-      });
+<header class="bg-red-700 p-5 text-center text-2xl font-bold">
+  👤 الملف الشخصي - الالتزام
+</header>
 
-      displayData.textContent =
-        `الاسم: ${username} - الطول: ${height} سم - الوزن: ${weight} كغ`;
-    });
+<main class="max-w-md mx-auto p-4">
 
-    // 💪 Streak System
-    workoutTodayBtn.addEventListener("click", async () => {
-      const username = form.username.value.trim();
-      if (!username) return;
+  <!-- 👤 المستخدم -->
+  <div class="bg-gray-800 p-4 rounded-lg text-center mb-4">
+    <h2 id="username" class="text-xl font-bold text-red-400"></h2>
 
-      const today = getToday();
+    <p id="streakText" class="mt-2 text-yellow-400 font-bold"></p>
+    <p id="percentText" class="text-blue-300 font-bold"></p>
+  </div>
 
-      const snapshot = await get(ref(db, "gymUsers/" + username));
+  <!-- 🏆 Badges -->
+  <div class="bg-gray-800 p-4 rounded-lg mb-4">
+    <h3 class="font-bold text-red-400 mb-2">🏆 الإنجازات</h3>
+    <div id="badges"></div>
+  </div>
 
-      let data = snapshot.exists() ? snapshot.val() : {};
+  <!-- 📅 Calendar -->
+  <div class="bg-gray-800 p-4 rounded-lg">
+    <h3 class="font-bold text-red-400 mb-2">📅 التقويم الشهري</h3>
 
-      let streak = data.streak || 0;
-      let lastDate = data.lastWorkoutDate || null;
+    <div class="flex justify-between mb-2 text-sm text-gray-300">
+      <span>أحد</span><span>إث</span><span>ث</span><span>أر</span><span>خ</span><span>ج</span><span>س</span>
+    </div>
 
-      if (lastDate === today) {
-        streakText.textContent = "⚠️ سجلت تمرينك اليوم بالفعل";
-        return;
-      }
+    <div id="calendar" class="flex flex-wrap"></div>
+  </div>
 
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yDate = yesterday.toISOString().split("T")[0];
+  <!-- زر -->
+  <button id="markBtn"
+    class="w-full mt-4 bg-blue-600 p-3 rounded-lg font-bold">
+    💪 تسجيل تمرين اليوم
+  </button>
 
-      if (lastDate === yDate) {
-        streak++;
-      } else {
-        streak = 1;
-      }
+</main>
 
-      await set(ref(db, "gymUsers/" + username), {
-        ...data,
-        streak,
-        lastWorkoutDate: today
-      });
+<!-- Navigation -->
+<nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl">
+  <a href="index.html">🏠</a>
+  <a href="workouts.html">🏋️‍♂️</a>
+  <a href="meals.html">🍽️</a>
+  <a href="stats.html">📊</a>
+  <a href="profile.html">👤</a>
+</nav>
 
-      let msg = "";
-      if (streak >= 7) msg = "🔥 ممتاز جداً! سلسلة قوية!";
-      else if (streak >= 3) msg = "💪 بداية رائعة استمر!";
-      else msg = "🚀 استمر ولا تتوقف!";
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-      streakText.textContent = `🔥 سلسلة التمرين: ${streak} يوم\n${msg}`;
-    });
+const firebaseConfig = {
+  apiKey:"AIzaSyC7EVNCSl48CQgIC_a8wdC5UG2tKLtNKjQ",
+  authDomain:"garag-system.firebaseapp.com",
+  databaseURL:"https://garag-system-default-rtdb.firebaseio.com",
+  projectId:"garag-system",
+  storageBucket:"garag-system.firebasestorage.app",
+  messagingSenderId:"330947022055",
+  appId:"1:330947022055:web:ce96293502f40d2645a642"
+};
 
-  </script>
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const currentUser = "رعد"; // لاحقاً تربطه بـ login
+
+const username = document.getElementById("username");
+const calendar = document.getElementById("calendar");
+const streakText = document.getElementById("streakText");
+const percentText = document.getElementById("percentText");
+const badges = document.getElementById("badges");
+const markBtn = document.getElementById("markBtn");
+
+function getToday(){
+  return new Date().toISOString().split("T")[0];
+}
+
+// 📅 توليد الشهر
+function generateMonth(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+
+  return {firstDay, daysInMonth, year, month};
+}
+
+// 🔥 حساب streak
+function calcStreak(att){
+  let streak = 0;
+  let d = new Date();
+
+  while(true){
+    const key = d.toISOString().split("T")[0];
+    if(att[key]){
+      streak++;
+      d.setDate(d.getDate()-1);
+    } else break;
+  }
+
+  return streak;
+}
+
+// 📊 نسبة الالتزام
+function calcPercent(att, days){
+  let done = Object.keys(att || {}).length;
+  return Math.round((done / days) * 100);
+}
+
+// 🏆 badges
+function renderBadges(streak){
+  badges.innerHTML = "";
+
+  if(streak >= 7){
+    badges.innerHTML += "🥉 7 أيام متتالية<br>";
+  }
+  if(streak >= 30){
+    badges.innerHTML += "🥇 30 يوم أسطوري<br>";
+  }
+  if(streak === 0){
+    badges.innerHTML = "ابدأ التمرين اليوم 💪";
+  }
+}
+
+// 📅 عرض calendar
+function renderCalendar(att){
+  const {firstDay, daysInMonth} = generateMonth();
+
+  calendar.innerHTML = "";
+
+  // empty cells
+  for(let i=0;i<firstDay;i++){
+    const div = document.createElement("div");
+    div.className="day gray";
+    calendar.appendChild(div);
+  }
+
+  for(let d=1; d<=daysInMonth; d++){
+    const date = new Date();
+    date.setDate(d);
+    const key = date.toISOString().split("T")[0];
+
+    const div = document.createElement("div");
+    div.className = "day";
+
+    if(att[key]){
+      div.classList.add("green");
+      div.textContent = d;
+    } else {
+      div.classList.add("red");
+      div.textContent = d;
+    }
+
+    calendar.appendChild(div);
+  }
+}
+
+// 🔥 تحميل البيانات
+async function load(){
+  const snap = await get(ref(db,"gymUsers/"+currentUser));
+
+  let data = snap.exists()? snap.val() : {};
+
+  if(!data.attendance) data.attendance = {};
+
+  username.textContent = data.username || currentUser;
+
+  const streak = calcStreak(data.attendance);
+
+  streakText.textContent = "🔥 Streak: " + streak + " يوم";
+
+  const percent = calcPercent(data.attendance, 30);
+  percentText.textContent = "📊 الالتزام: " + percent + "%";
+
+  renderBadges(streak);
+  renderCalendar(data.attendance);
+
+  return data;
+}
+
+// 💪 تسجيل اليوم
+markBtn.onclick = async () => {
+  const snap = await get(ref(db,"gymUsers/"+currentUser));
+  let data = snap.exists()? snap.val() : {};
+
+  if(!data.attendance) data.attendance = {};
+
+  const today = getToday();
+
+  data.attendance[today] = true;
+
+  await set(ref(db,"gymUsers/"+currentUser), data);
+
+  load();
+};
+
+load();
+
+</script>
 
 </body>
 </html>
