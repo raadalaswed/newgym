@@ -193,7 +193,10 @@ function calculateBMI() {
     const bmi = w / (h * h);
 
     let status = "";
-    if (bmi < 18.5) status = "نحيف";
+    if (bmi < 18.5)
+    { tatus = "نحيف";
+       bmiResult.style.color = "blue";
+}
     else if (bmi < 25) status = "طبيعي";
     else if (bmi < 30) status = "زائد";
     else status = "سمنة";
