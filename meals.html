@@ -1,316 +1,1433 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>الوجبات - نظام التنشيف وزيادة العضلات</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo&family=Tajawal&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --red: #e63946;
+      --red-dark: #c1121f;
+      --red-glow: rgba(230, 57, 70, 0.3);
+      --bg: #080808;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --card: #141414;
+      --card-hover: #1e1e1e;
+      --border: rgba(255,255,255,0.06);
+      --text: #f0f0f0;
+      --muted: #888;
+      --gold: #f4a261;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      background-color: #0d0d0d;
-      color: white;
-      padding-bottom: 120px;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Tajawal', 'Cairo', sans-serif;
+      padding-bottom: 100px;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .tab-button {
-      transition: background-color 0.3s ease;
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+      background: var(--bg);
     }
-    .tab-button.active {
-      background-color: #ef4444; /* Tailwind red-500 */
-      color: white;
+    .header-inner {
+      position: relative;
+      z-index: 2;
+      padding: 32px 20px 20px;
+    }
+    .header-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(230,57,70,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
       font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--red);
+      text-transform: uppercase;
+      background: rgba(230,57,70,0.1);
+      border: 1px solid rgba(230,57,70,0.3);
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
     }
-    .meal-item:hover {
-      background-color: #292929;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+    .header-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      line-height: 1.15;
+      color: #fff;
     }
-    .description {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-top: 4px;
-      line-height: 1.3;
+    .header-title span { color: var(--red); }
+    .header-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 6px;
     }
-    /* لإخفاء/إظهار الوصف */
-    .hidden-desc {
-      display: none;
-    }
-    /* نصائح التغذية */
-    #nutrition-tips {
-      background-color: #1f2937; /* Tailwind gray-800 */
-      padding: 12px 20px;
-      margin-top: 40px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      color: #f9fafb; /* Tailwind gray-50 */
-    }
-    /* تقسيم الوجبات حسب أوقات اليوم */
-    .meal-time {
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #f87171; /* Tailwind red-400 */
-      font-size: 1rem;
-      border-bottom: 1px solid #ef4444;
-      padding-bottom: 2px;
+    .header-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--red), transparent);
       margin-top: 20px;
+      opacity: 0.4;
     }
+
+    /* ── MACRO SUMMARY BAR ── */
+    .macro-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+    .macro-item {
+      background: var(--bg2);
+      padding: 14px 10px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    .macro-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .macro-item:hover::after { transform: scaleX(1); }
+    .macro-val {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--red);
+      display: block;
+    }
+    .macro-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* ── TAB NAV ── */
+    .tabs-wrapper {
+      padding: 18px 16px 0;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 5px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 4px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+    }
+    .tab-btn .tab-num {
+      display: block;
+      font-size: 1rem;
+      font-weight: 900;
+      color: inherit;
+    }
+    .tab-btn.active {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--red-glow);
+    }
+    .tab-btn:not(.active):hover {
+      background: var(--bg3);
+      color: var(--text);
+    }
+
+    /* ── PROGRESS RING ── */
+    .progress-section {
+      padding: 18px 16px;
+    }
+    .progress-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .ring-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+    .ring-wrap svg { transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: #222; stroke-width: 6; }
+    .ring-fill {
+      fill: none;
+      stroke: var(--red);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+    }
+    .ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .ring-text small {
+      font-size: 0.55rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: -2px;
+    }
+    .progress-info { flex: 1; }
+    .progress-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .progress-bars { display: flex; flex-direction: column; gap: 6px; }
+    .pbar-row { display: flex; align-items: center; gap: 8px; }
+    .pbar-name { font-size: 0.7rem; color: var(--muted); width: 45px; text-align: right; }
+    .pbar-track {
+      flex: 1;
+      height: 4px;
+      background: #222;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .pbar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 1s ease;
+    }
+    .pbar-val { font-size: 0.65rem; color: var(--muted); width: 30px; }
+
+    /* ── MEAL SECTION ── */
+    .meal-section { padding: 0 16px 8px; }
+    .meal-section:first-of-type { padding-top: 8px; }
+
+    .time-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 0 8px;
+    }
+    .time-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: rgba(230,57,70,0.12);
+      border: 1px solid rgba(230,57,70,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .time-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.05em;
+    }
+    .time-sublabel {
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+    .time-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(230,57,70,0.3), transparent);
+    }
+
+    /* ── MEAL CARD ── */
+    .meal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+    }
+    .meal-card::before {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--red);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .meal-card.open::before { opacity: 1; }
+    .meal-card:hover {
+      border-color: rgba(230,57,70,0.25);
+      background: var(--card-hover);
+    }
+    .meal-card.open { border-color: rgba(230,57,70,0.3); }
+
+    .meal-top {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .meal-emoji {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .meal-info { flex: 1; min-width: 0; }
+    .meal-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: #fff;
+    }
+    .meal-macros {
+      display: flex;
+      gap: 8px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+    .macro-tag {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.03em;
+    }
+    .macro-tag.protein { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .macro-tag.carbs { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .macro-tag.fats { background: rgba(52,211,153,0.15); color: #34d399; }
+    .meal-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .meal-cal {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--red);
+    }
+    .meal-cal span {
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .meal-chevron {
+      font-size: 0.6rem;
+      color: var(--muted);
+      transition: transform 0.25s;
+    }
+    .meal-card.open .meal-chevron { transform: rotate(180deg); }
+
+    /* Description panel */
+    .meal-desc {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    .meal-card.open .meal-desc { max-height: 200px; }
+    .meal-desc-inner {
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+    }
+    .meal-desc-inner p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .meal-desc-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .benefit-tag {
+      font-size: 0.65rem;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      color: #bbb;
+      border: 1px solid var(--border);
+    }
+
+    /* ── HIDDEN MENU ── */
+    .menu-content { display: none; }
+    .menu-content.active { display: block; }
+
+    /* ── TIPS ── */
+    .tips-section {
+      padding: 8px 16px 16px;
+    }
+    .tips-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .tips-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(230,57,70,0.06);
+    }
+    .tips-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .tips-body { padding: 14px 18px; }
+    .tip-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tip-item:last-child { border-bottom: none; }
+    .tip-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .tip-text {
+      font-size: 0.8rem;
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    /* ── WATER TRACKER ── */
+    .water-section {
+      padding: 0 16px 16px;
+    }
+    .water-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .water-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .water-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .water-count {
+      font-size: 0.8rem;
+      color: var(--red);
+      font-weight: 700;
+    }
+    .cups-grid {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .cup {
+      width: 36px; height: 40px;
+      border-radius: 6px;
+      border: 2px solid #222;
+      background: #181818;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cup::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+      transform: translateY(100%);
+      transition: transform 0.3s;
+    }
+    .cup.filled::after { transform: translateY(0); }
+    .cup.filled { border-color: #3b82f6; }
+    .cup-icon { position: relative; z-index: 1; }
+
+    /* ── BOTTOM NAV ── */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 70px;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+      z-index: 100;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .nav-item .nav-icon { font-size: 1.3rem; }
+    .nav-item.active { color: var(--red); }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 30px; height: 2px;
+      background: var(--red);
+      border-radius: 0 0 3px 3px;
+    }
+    .nav-item:hover:not(.active) { color: #ccc; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .meal-card { animation: fadeUp 0.35s ease both; }
+    .meal-card:nth-child(1) { animation-delay: 0.05s; }
+    .meal-card:nth-child(2) { animation-delay: 0.1s; }
+    .meal-card:nth-child(3) { animation-delay: 0.15s; }
+    .meal-card:nth-child(4) { animation-delay: 0.2s; }
+    .meal-card:nth-child(5) { animation-delay: 0.25s; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%; transform: translateX(-50%) translateY(-80px);
+      background: var(--red);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-  <header class="bg-red-600 p-4 text-center text-xl font-bold">
-    🍽️ وجبات اليوم - نظام التنشيف وزيادة العضلات
-  </header>
+<div class="toast" id="toast"></div>
 
-  <main class="p-4">
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="header-bg"></div>
+  <div class="header-inner">
+    <div class="header-label">🔥 نظام التغذية</div>
+    <h1 class="header-title">خطة <span>الوجبات</span><br>اليومية</h1>
+    <p class="header-sub">تنشيف وبناء العضلات — ٥ وجبات يومياً</p>
+    <div class="header-divider"></div>
+  </div>
+</header>
 
-    <!-- تبويبات التنقل بين الأنظمة -->
-    <div class="flex justify-center gap-3 mb-6">
-      <button onclick="showMenu(1)" id="btn1" class="tab-button px-4 py-2 rounded bg-red-500 text-white">النظام 1</button>
-      <button onclick="showMenu(2)" id="btn2" class="tab-button px-4 py-2 rounded bg-gray-700 text-white hover:bg-red-500">النظام 2</button>
-      <button onclick="showMenu(3)" id="btn3" class="tab-button px-4 py-2 rounded bg-gray-700 text-white hover:bg-red-500">النظام 3</button>
-      <button onclick="showMenu(4)" id="btn4" class="tab-button px-4 py-2 rounded bg-gray-700 text-white hover:bg-red-500">النظام 4</button>
+<!-- ══ MACRO SUMMARY ══ -->
+<div class="macro-bar" id="macroBar">
+  <div class="macro-item">
+    <span class="macro-val" id="totalCal">—</span>
+    <span class="macro-label">كالوري</span>
+  </div>
+  <div class="macro-item">
+    <span class="macro-val" style="color:#60a5fa">~130غ</span>
+    <span class="macro-label">بروتين</span>
+  </div>
+  <div class="macro-item">
+    <span class="macro-val" style="color:#fbbf24">~180غ</span>
+    <span class="macro-label">كارب</span>
+  </div>
+  <div class="macro-item">
+    <span class="macro-val" style="color:#34d399">~45غ</span>
+    <span class="macro-label">دهون</span>
+  </div>
+</div>
+
+<!-- ══ TAB NAV ══ -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showMenu(1)" id="btn1">
+      <span class="tab-num">١</span>النظام
+    </button>
+    <button class="tab-btn" onclick="showMenu(2)" id="btn2">
+      <span class="tab-num">٢</span>النظام
+    </button>
+    <button class="tab-btn" onclick="showMenu(3)" id="btn3">
+      <span class="tab-num">٣</span>النظام
+    </button>
+    <button class="tab-btn" onclick="showMenu(4)" id="btn4">
+      <span class="tab-num">٤</span>النظام
+    </button>
+  </div>
+</div>
+
+<!-- ══ PROGRESS CARD ══ -->
+<div class="progress-section">
+  <div class="progress-card">
+    <div class="ring-wrap">
+      <svg width="80" height="80" viewBox="0 0 80 80">
+        <circle class="ring-bg" cx="40" cy="40" r="35"/>
+        <circle class="ring-fill" id="calorieRing" cx="40" cy="40" r="35"/>
+      </svg>
+      <div class="ring-text">
+        <span id="ringPct">0%</span>
+        <small>هدف</small>
+      </div>
+    </div>
+    <div class="progress-info">
+      <div class="progress-title">تتبع الوجبات</div>
+      <div class="progress-bars">
+        <div class="pbar-row">
+          <span class="pbar-name">بروتين</span>
+          <div class="pbar-track"><div class="pbar-fill" id="pbarProt" style="width:0%;background:#60a5fa"></div></div>
+          <span class="pbar-val" id="pbarProtVal">0%</span>
+        </div>
+        <div class="pbar-row">
+          <span class="pbar-name">كارب</span>
+          <div class="pbar-track"><div class="pbar-fill" id="pbarCarb" style="width:0%;background:#fbbf24"></div></div>
+          <span class="pbar-val" id="pbarCarbVal">0%</span>
+        </div>
+        <div class="pbar-row">
+          <span class="pbar-name">دهون</span>
+          <div class="pbar-track"><div class="pbar-fill" id="pbarFat" style="width:0%;background:#34d399"></div></div>
+          <span class="pbar-val" id="pbarFatVal">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MENUS ══ -->
+
+<!-- النظام 1 -->
+<div class="menu-content active" id="menu1">
+  <div class="meal-section">
+
+    <div class="time-header">
+      <div class="time-icon">🌅</div>
+      <div><div class="time-label">فطور</div><div class="time-sublabel">7:00 – 8:30 ص</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥚</div>
+        <div class="meal-info">
+          <div class="meal-name">بياض بيض (150غ) + تمر (3 حبات) + تفاح</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 28غ</span>
+            <span class="macro-tag carbs">كارب 45غ</span>
+            <span class="macro-tag fats">دهون 2غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">350 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>وجبة غنية بالبروتين والسكريات الطبيعية للطاقة الصباحية. التمر غني بالبوتاسيوم والمغنيسيوم والتفاح يوفر الألياف اللازمة لصحة الجهاز الهضمي.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⚡ طاقة</span><span class="benefit-tag">💪 بروتين</span><span class="benefit-tag">🌿 ألياف</span>
+        </div>
+      </div></div>
     </div>
 
-    <!-- النظام 1 -->
-    <ul id="menu1" class="space-y-3">
-      <div class="meal-time">فطور</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 1: بياض بيض (150غ) + تمر (3 حبات) + تفاح</span>
-          <span class="text-red-400">350 كالوري</span>
+    <div class="time-header">
+      <div class="time-icon">🏋️</div>
+      <div><div class="time-label">قبل التمرين</div><div class="time-sublabel">60-90 دقيقة قبل</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🍗</div>
+        <div class="meal-info">
+          <div class="meal-name">صدر دجاج مشوي (150غ) + أرز بني (120غ) + خضار مشوية</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 42غ</span>
+            <span class="macro-tag carbs">كارب 55غ</span>
+            <span class="macro-tag fats">دهون 6غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">وجبة غنية بالبروتين والسكريات الطبيعية للطاقة. التمر غني بالبوتاسيوم والتفاح بالألياف.</p>
-      </li>
-
-      <div class="meal-time">قبل التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 2: صدر دجاج مشوي (150غ) + أرز بني (120غ) + خضار مشوية</span>
-          <span class="text-red-400">450 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">450 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">البروتين مع الكربوهيدرات المعقدة يوفر طاقة مستمرة أثناء التمرين.</p>
-      </li>
-
-      <div class="meal-time">بعد التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 3: سلطة تونة (100غ) + خبز بر (2 شريحة)</span>
-          <span class="text-red-400">400 كالوري</span>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>البروتين مع الكربوهيدرات المعقدة يوفر طاقة مستمرة وثابتة أثناء التمرين. الأرز البني يُبطئ إطلاق الغلوكوز ويحافظ على الأداء.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⚡ طاقة مستدامة</span><span class="benefit-tag">💪 بناء عضلات</span><span class="benefit-tag">🔥 أداء</span>
         </div>
-        <p class="description hidden-desc">بروتين عالي الجودة لتعويض العضلات + كربوهيدرات للانتعاش.</p>
-      </li>
+      </div></div>
+    </div>
 
-      <div class="meal-time">وجبة خفيفة</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 4: زبادي يوناني (150غ) + مكسرات (30غ)</span>
-          <span class="text-red-400">300 كالوري</span>
+    <div class="time-header">
+      <div class="time-icon">⚡</div>
+      <div><div class="time-label">بعد التمرين</div><div class="time-sublabel">خلال 30-45 دقيقة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🐟</div>
+        <div class="meal-info">
+          <div class="meal-name">سلطة تونة (100غ) + خبز بر (2 شريحة)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 35غ</span>
+            <span class="macro-tag carbs">كارب 40غ</span>
+            <span class="macro-tag fats">دهون 8غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">مصدر جيد للدهون الصحية والبروبيوتيك لصحة الجهاز الهضمي.</p>
-      </li>
-
-      <div class="meal-time">عشاء</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 5: سمك مشوي (150غ) + بطاطا مسلوقة (150غ)</span>
-          <span class="text-red-400">500 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">400 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">مصدر أوميغا 3 والبروتين مع نشويات سهلة الهضم في المساء.</p>
-      </li>
-    </ul>
-
-    <!-- النظام 2 -->
-    <ul id="menu2" class="space-y-3 hidden">
-      <div class="meal-time">فطور</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 1: بيضتان مسلوقتان + خبز بر (2 شريحة) + موزة</span>
-          <span class="text-red-400">320 كالوري</span>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>بروتين عالي الجودة لإصلاح العضلات وتعويض التلف الناتج عن التمرين + كربوهيدرات لاستعادة مخزون الجليكوجين بسرعة.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🔧 تعافي</span><span class="benefit-tag">💪 إصلاح عضلات</span><span class="benefit-tag">⚡ جليكوجين</span>
         </div>
-        <p class="description hidden-desc">بروتين وكربوهيدرات بسيطة لمزيد من الطاقة.</p>
-      </li>
+      </div></div>
+    </div>
 
-      <div class="meal-time">قبل التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 2: لحم بقري قليل الدهن (150غ) + أرز بني (120غ)</span>
-          <span class="text-red-400">480 كالوري</span>
+    <div class="time-header">
+      <div class="time-icon">🌤</div>
+      <div><div class="time-label">وجبة خفيفة</div><div class="time-sublabel">منتصف العصر</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥛</div>
+        <div class="meal-info">
+          <div class="meal-name">زبادي يوناني (150غ) + مكسرات (30غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 15غ</span>
+            <span class="macro-tag carbs">كارب 10غ</span>
+            <span class="macro-tag fats">دهون 18غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">بروتين عالي مع كربوهيدرات معقدة لدعم التمرين.</p>
-      </li>
-
-      <div class="meal-time">بعد التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 3: سلطة حمص (100غ) + خضار طازجة (100غ)</span>
-          <span class="text-red-400">350 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">300 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">مصدر بروتين نباتي مع الألياف لتعزيز الهضم.</p>
-      </li>
-
-      <div class="meal-time">وجبة خفيفة</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 4: جبن قريش (100غ) + خيار وطماطم (100غ)</span>
-          <span class="text-red-400">280 كالوري</span>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مصدر ممتاز للدهون الصحية غير المشبعة والبروبيوتيك الذي يعزز صحة الجهاز الهضمي ويحسن امتصاص العناصر الغذائية.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🦠 بروبيوتيك</span><span class="benefit-tag">🥑 دهون صحية</span><span class="benefit-tag">🧠 تركيز</span>
         </div>
-        <p class="description hidden-desc">مصدر بروتين ومنخفض السعرات.</p>
-      </li>
+      </div></div>
+    </div>
 
-      <div class="meal-time">عشاء</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 5: صدر دجاج مشوي (150غ) + كينوا (120غ)</span>
-          <span class="text-red-400">510 كالوري</span>
+    <div class="time-header">
+      <div class="time-icon">🌙</div>
+      <div><div class="time-label">عشاء</div><div class="time-sublabel">قبل النوم بـ 2+ ساعة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🐠</div>
+        <div class="meal-info">
+          <div class="meal-name">سمك مشوي (150غ) + بطاطا مسلوقة (150غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 32غ</span>
+            <span class="macro-tag carbs">كارب 35غ</span>
+            <span class="macro-tag fats">دهون 10غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">بروتين مع كربوهيدرات كاملة لتعزيز الشبع والعضلات.</p>
-      </li>
-    </ul>
-
-    <!-- النظام 3 -->
-    <ul id="menu3" class="space-y-3 hidden">
-      <div class="meal-time">فطور</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 1: عصير بروتين مع موز (250 مل + 1 موزة)</span>
-          <span class="text-red-400">330 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">500 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">مصدر سريع للبروتين والكربوهيدرات قبل التمرين.</p>
-      </li>
-
-      <div class="meal-time">قبل التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 2: سمك سلمون (150غ) + خضار مشوية (150غ)</span>
-          <span class="text-red-400">520 كالوري</span>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مصدر أوميغا 3 الضروري لتقليل الالتهابات وتعزيز التعافي الليلي مع نشويات سهلة الهضم تدعم نوماً أفضل.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🌊 أوميغا 3</span><span class="benefit-tag">😴 نوم أفضل</span><span class="benefit-tag">🔧 تعافي</span>
         </div>
-        <p class="description hidden-desc">أوميغا 3 وبروتين وكربوهيدرات صحية.</p>
-      </li>
+      </div></div>
+    </div>
 
-      <div class="meal-time">بعد التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 3: سلطة تونة (100غ) مع زيت زيتون (ملعقة)</span>
-          <span class="text-red-400">400 كالوري</span>
+  </div>
+</div>
+
+<!-- النظام 2 -->
+<div class="menu-content" id="menu2">
+  <div class="meal-section">
+
+    <div class="time-header">
+      <div class="time-icon">🌅</div>
+      <div><div class="time-label">فطور</div><div class="time-sublabel">7:00 – 8:30 ص</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🍳</div>
+        <div class="meal-info">
+          <div class="meal-name">بيضتان مسلوقتان + خبز بر (2 شريحة) + موزة</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 20غ</span>
+            <span class="macro-tag carbs">كارب 50غ</span>
+            <span class="macro-tag fats">دهون 10غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">مصدر بروتين صحي ودهون جيدة لتعزيز التعافي.</p>
-      </li>
-
-      <div class="meal-time">وجبة خفيفة</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 4: لبن زبادي (150غ) + توت (100غ)</span>
-          <span class="text-red-400">290 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">320 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">مصدر للبروتين والكالسيوم مع مضادات الأكسدة.</p>
-      </li>
-
-      <div class="meal-time">عشاء</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 5: صدر دجاج (150غ) + بطاطا مسلوقة (150غ)</span>
-          <span class="text-red-400">480 كالوري</span>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>بروتين كامل من البيض مع كربوهيدرات بسيطة وسريعة الامتصاص من الموز لمنح الطاقة الفورية في الصباح.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⚡ طاقة فورية</span><span class="benefit-tag">💪 بروتين كامل</span>
         </div>
-        <p class="description hidden-desc">بروتين نشوي متوازن للهضم قبل النوم.</p>
-      </li>
-    </ul>
+      </div></div>
+    </div>
 
-    <!-- النظام 4 -->
-    <ul id="menu4" class="space-y-3 hidden">
-      <div class="meal-time">فطور</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 1: برتقال + لبن (250 مل)</span>
-          <span class="text-red-400">340 كالوري</span>
+    <div class="time-header">
+      <div class="time-icon">🏋️</div>
+      <div><div class="time-label">قبل التمرين</div><div class="time-sublabel">60-90 دقيقة قبل</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥩</div>
+        <div class="meal-info">
+          <div class="meal-name">لحم بقري قليل الدهن (150غ) + أرز بني (120غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 45غ</span>
+            <span class="macro-tag carbs">كارب 55غ</span>
+            <span class="macro-tag fats">دهون 8غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">مصدر فيتامين سي وحليب غني بالكالسيوم.</p>
-      </li>
-
-      <div class="meal-time">قبل التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 2: لحم بقري قليل الدهن (150غ) + أرز بني (120غ)</span>
-          <span class="text-red-400">470 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">480 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">طاقة بطيئة الإفراز وبروتين.</p>
-      </li>
-
-      <div class="meal-time">بعد التمرين</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 3: سلطة خضراء مع خيار وطماطم + زيت زيتون (ملعقة)</span>
-          <span class="text-red-400">350 كالوري</span>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>اللحم البقري غني بالحديد والزنك وهو بروتين عالي الجودة مع أرز بني يوفر طاقة مستمرة طوال التمرين.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⚡ قوة</span><span class="benefit-tag">🔋 طاقة</span><span class="benefit-tag">💪 حديد وزنك</span>
         </div>
-        <p class="description hidden-desc">فيتامينات وألياف مع دهون صحية.</p>
-      </li>
+      </div></div>
+    </div>
 
-      <div class="meal-time">وجبة خفيفة</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 4: زبادي يوناني (150غ) + مكسرات (30غ)</span>
-          <span class="text-red-400">300 كالوري</span>
+    <div class="time-header">
+      <div class="time-icon">⚡</div>
+      <div><div class="time-label">بعد التمرين</div><div class="time-sublabel">خلال 30-45 دقيقة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🫘</div>
+        <div class="meal-info">
+          <div class="meal-name">سلطة حمص (100غ) + خضار طازجة (100غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 18غ</span>
+            <span class="macro-tag carbs">كارب 38غ</span>
+            <span class="macro-tag fats">دهون 10غ</span>
+          </div>
         </div>
-        <p class="description hidden-desc">مصدر للدهون الصحية والبروتين.</p>
-      </li>
-
-      <div class="meal-time">عشاء</div>
-      <li class="meal-item bg-gray-800 p-3 rounded" onclick="toggleDesc(this)">
-        <div class="flex justify-between items-center">
-          <span>وجبة 5: سمك أبيض مشوي (150غ) + خضار مسلوقة (150غ)</span>
-          <span class="text-red-400">490 كالوري</span>
+        <div class="meal-right">
+          <div class="meal-cal">350 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
         </div>
-        <p class="description hidden-desc">بروتين عالي الجودة مع ألياف خفيفة.</p>
-      </li>
-    </ul>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مصدر بروتين نباتي مع ألياف غنية تعزز الهضم وتقلل الالتهابات. الحمص غني بالحديد والمغنيسيوم المهمين للعضلات.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🌿 نباتي</span><span class="benefit-tag">🦠 هضم</span><span class="benefit-tag">💪 مغنيسيوم</span>
+        </div>
+      </div></div>
+    </div>
 
-    <!-- قسم النصائح العامة -->
-    <section id="nutrition-tips" dir="rtl">
-      <h3 class="font-bold mb-2 text-red-400 text-center">نصائح عامة للتغذية والتمرين</h3>
-      <ul class="list-disc list-inside space-y-1">
-        <li>يفضل تناول الوجبة التي قبل التمرين قبل حوالي 60-90 دقيقة.</li>
-        <li>تناول وجبة بعد التمرين خلال 30-45 دقيقة لتعزيز التعافي.</li>
-        <li>شرب كمية كافية من الماء طوال اليوم للحفاظ على الترطيب.</li>
-        <li>تناول الفواكه الطازجة يومياً مثل التفاح، الموز، البرتقال لتعزيز الطاقة والألياف.</li>
-        <li>تجنب الوجبات الثقيلة قبل النوم بساعتين على الأقل.</li>
-      </ul>
-    </section>
+    <div class="time-header">
+      <div class="time-icon">🌤</div>
+      <div><div class="time-label">وجبة خفيفة</div><div class="time-sublabel">منتصف العصر</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🧀</div>
+        <div class="meal-info">
+          <div class="meal-name">جبن قريش (100غ) + خيار وطماطم (100غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 16غ</span>
+            <span class="macro-tag carbs">كارب 8غ</span>
+            <span class="macro-tag fats">دهون 5غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">280 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>جبن قريش منخفض السعرات ومرتفع البروتين مثالي لمرحلة التنشيف، مع خضار منعشة وقليلة السعرات تساعد على الشبع.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🔥 تنشيف</span><span class="benefit-tag">💪 بروتين عالي</span><span class="benefit-tag">✅ منخفض كالوري</span>
+        </div>
+      </div></div>
+    </div>
 
-  </main>
+    <div class="time-header">
+      <div class="time-icon">🌙</div>
+      <div><div class="time-label">عشاء</div><div class="time-sublabel">قبل النوم بـ 2+ ساعة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🍗</div>
+        <div class="meal-info">
+          <div class="meal-name">صدر دجاج مشوي (150غ) + كينوا (120غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 48غ</span>
+            <span class="macro-tag carbs">كارب 50غ</span>
+            <span class="macro-tag fats">دهون 8غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">510 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>الكينوا تحتوي على كل الأحماض الأمينية الأساسية مما يجعل هذه الوجبة استثنائية لبناء العضلات الليلي أثناء النوم.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⭐ أحماض أمينية كاملة</span><span class="benefit-tag">💪 بناء ليلي</span>
+        </div>
+      </div></div>
+    </div>
 
-  <nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
-    <a href="index.html" class="text-white" aria-label="الرئيسية">🏠</a>
-    <a href="workouts.html" class="text-white" aria-label="التمارين">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white" aria-label="الوجبات">🍽️</a>
-    <a href="stats.html" class="text-white" aria-label="الإحصائيات">📊</a>
-    <a href="profile.html" class="text-white" aria-label="الملف الشخصي">👤</a>
-  </nav>
+  </div>
+</div>
 
-  <script>
-    // التحكم بعرض القوائم (التبويبات)
-    function showMenu(menuNumber) {
-      for(let i=1; i<=4; i++) {
-        document.getElementById('menu' + i).classList.add('hidden');
-        document.getElementById('btn' + i).classList.remove('bg-red-500');
-        document.getElementById('btn' + i).classList.add('bg-gray-700');
-      }
-      document.getElementById('menu' + menuNumber).classList.remove('hidden');
-      document.getElementById('btn' + menuNumber).classList.add('bg-red-500');
-      document.getElementById('btn' + menuNumber).classList.remove('bg-gray-700');
+<!-- النظام 3 -->
+<div class="menu-content" id="menu3">
+  <div class="meal-section">
+
+    <div class="time-header">
+      <div class="time-icon">🌅</div>
+      <div><div class="time-label">فطور</div><div class="time-sublabel">7:00 – 8:30 ص</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥤</div>
+        <div class="meal-info">
+          <div class="meal-name">عصير بروتين مع موز (250 مل + 1 موزة)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 30غ</span>
+            <span class="macro-tag carbs">كارب 40غ</span>
+            <span class="macro-tag fats">دهون 4غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">330 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مصدر سريع وعملي للبروتين والكربوهيدرات مثالي قبل التمرين الصباحي. سهل الهضم ويُجهز الجسم للأداء العالي.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⚡ سريع</span><span class="benefit-tag">🏃 قبل التمرين</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">🏋️</div>
+      <div><div class="time-label">قبل التمرين</div><div class="time-sublabel">60-90 دقيقة قبل</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🐟</div>
+        <div class="meal-info">
+          <div class="meal-name">سمك سلمون (150غ) + خضار مشوية (150غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 38غ</span>
+            <span class="macro-tag carbs">كارب 20غ</span>
+            <span class="macro-tag fats">دهون 22غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">520 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>سمك السلمون من أغنى مصادر أوميغا 3 التي تقلل الالتهابات وتحسن الأداء العضلي. بروتين عالي الجودة مع خضار مغذية.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🌊 أوميغا 3</span><span class="benefit-tag">💪 بروتين</span><span class="benefit-tag">🔥 أداء</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">⚡</div>
+      <div><div class="time-label">بعد التمرين</div><div class="time-sublabel">خلال 30-45 دقيقة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥗</div>
+        <div class="meal-info">
+          <div class="meal-name">سلطة تونة (100غ) مع زيت زيتون (ملعقة)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 30غ</span>
+            <span class="macro-tag carbs">كارب 5غ</span>
+            <span class="macro-tag fats">دهون 14غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">400 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مزيج مثالي من البروتين العالي والدهون الصحية لتعزيز التعافي العضلي وامتصاص الفيتامينات التي تذوب في الدهون.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🔧 تعافي</span><span class="benefit-tag">🥑 دهون صحية</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">🌤</div>
+      <div><div class="time-label">وجبة خفيفة</div><div class="time-sublabel">منتصف العصر</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🫐</div>
+        <div class="meal-info">
+          <div class="meal-name">لبن زبادي (150غ) + توت (100غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 10غ</span>
+            <span class="macro-tag carbs">كارب 25غ</span>
+            <span class="macro-tag fats">دهون 5غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">290 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>التوت من أقوى مصادر مضادات الأكسدة التي تسرع التعافي وتحارب الإجهاد التأكسدي الناتج عن التمرين الشديد.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🫐 أكسدة</span><span class="benefit-tag">🦠 بروبيوتيك</span><span class="benefit-tag">💊 كالسيوم</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">🌙</div>
+      <div><div class="time-label">عشاء</div><div class="time-sublabel">قبل النوم بـ 2+ ساعة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🍗</div>
+        <div class="meal-info">
+          <div class="meal-name">صدر دجاج (150غ) + بطاطا مسلوقة (150غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 38غ</span>
+            <span class="macro-tag carbs">كارب 35غ</span>
+            <span class="macro-tag fats">دهون 4غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">480 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>وجبة متوازنة ومريحة للجهاز الهضمي. البطاطا تحتوي على البوتاسيوم الذي يساعد على استرخاء العضلات وتحسين جودة النوم.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">😴 نوم أفضل</span><span class="benefit-tag">💪 تعافي ليلي</span>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- النظام 4 -->
+<div class="menu-content" id="menu4">
+  <div class="meal-section">
+
+    <div class="time-header">
+      <div class="time-icon">🌅</div>
+      <div><div class="time-label">فطور</div><div class="time-sublabel">7:00 – 8:30 ص</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🍊</div>
+        <div class="meal-info">
+          <div class="meal-name">برتقال + لبن (250 مل)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 12غ</span>
+            <span class="macro-tag carbs">كارب 50غ</span>
+            <span class="macro-tag fats">دهون 8غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">340 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مصدر ممتاز لفيتامين C الذي يعزز المناعة وامتصاص الحديد، مع حليب غني بالكالسيوم والبروتين لصحة العظام والعضلات.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🍊 فيتامين C</span><span class="benefit-tag">🦴 كالسيوم</span><span class="benefit-tag">💪 مناعة</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">🏋️</div>
+      <div><div class="time-label">قبل التمرين</div><div class="time-sublabel">60-90 دقيقة قبل</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥩</div>
+        <div class="meal-info">
+          <div class="meal-name">لحم بقري قليل الدهن (150غ) + أرز بني (120غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 45غ</span>
+            <span class="macro-tag carbs">كارب 55غ</span>
+            <span class="macro-tag fats">دهون 7غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">470 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مزيج الأرز البني مع اللحم البقري يوفر طاقة بطيئة الإفراز تدوم طوال التمرين مع كريتين طبيعي من اللحم لتعزيز القوة.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">⚡ طاقة بطيئة</span><span class="benefit-tag">💪 كريتين طبيعي</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">⚡</div>
+      <div><div class="time-label">بعد التمرين</div><div class="time-sublabel">خلال 30-45 دقيقة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥗</div>
+        <div class="meal-info">
+          <div class="meal-name">سلطة خضراء مع خيار وطماطم + زيت زيتون</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 4غ</span>
+            <span class="macro-tag carbs">كارب 20غ</span>
+            <span class="macro-tag fats">دهون 14غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">350 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>وجبة خفيفة غنية بالفيتامينات والمعادن ومضادات الأكسدة. زيت الزيتون يحارب الالتهابات ويدعم صحة القلب.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🫒 زيت الزيتون</span><span class="benefit-tag">🌿 فيتامينات</span><span class="benefit-tag">❤️ قلب</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">🌤</div>
+      <div><div class="time-label">وجبة خفيفة</div><div class="time-sublabel">منتصف العصر</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🥛</div>
+        <div class="meal-info">
+          <div class="meal-name">زبادي يوناني (150غ) + مكسرات (30غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 15غ</span>
+            <span class="macro-tag carbs">كارب 10غ</span>
+            <span class="macro-tag fats">دهون 18غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">300 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>مصدر ممتاز للدهون الصحية غير المشبعة مع بروتين الزبادي. المكسرات تحتوي على فيتامين E ومضادات الأكسدة.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🥜 فيت E</span><span class="benefit-tag">💪 بروتين</span><span class="benefit-tag">🧠 دهون صحية</span>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="time-header">
+      <div class="time-icon">🌙</div>
+      <div><div class="time-label">عشاء</div><div class="time-sublabel">قبل النوم بـ 2+ ساعة</div></div>
+      <div class="time-line"></div>
+    </div>
+    <div class="meal-card" onclick="toggleCard(this)">
+      <div class="meal-top">
+        <div class="meal-emoji">🐟</div>
+        <div class="meal-info">
+          <div class="meal-name">سمك أبيض مشوي (150غ) + خضار مسلوقة (150غ)</div>
+          <div class="meal-macros">
+            <span class="macro-tag protein">بروتين 36غ</span>
+            <span class="macro-tag carbs">كارب 18غ</span>
+            <span class="macro-tag fats">دهون 8غ</span>
+          </div>
+        </div>
+        <div class="meal-right">
+          <div class="meal-cal">490 <span>ك.ح</span></div>
+          <div class="meal-chevron">▼</div>
+        </div>
+      </div>
+      <div class="meal-desc"><div class="meal-desc-inner">
+        <p>وجبة عشاء مثالية: خفيفة على الجهاز الهضمي، عالية البروتين، منخفضة الدهون والكربوهيدرات. مثالي لمرحلة التنشيف الليلي.</p>
+        <div class="meal-desc-tags">
+          <span class="benefit-tag">🔥 تنشيف</span><span class="benefit-tag">💪 بروتين عالي</span><span class="benefit-tag">😴 هضم خفيف</span>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ WATER TRACKER ══ -->
+<div class="water-section">
+  <div class="water-card">
+    <div class="water-header">
+      <div class="water-title">💧 متتبع الماء</div>
+      <div class="water-count" id="waterCount">0 / 8 أكواب</div>
+    </div>
+    <div class="cups-grid" id="cupsGrid"></div>
+  </div>
+</div>
+
+<!-- ══ TIPS ══ -->
+<div class="tips-section">
+  <div class="tips-card">
+    <div class="tips-header">
+      <span>💡</span>
+      <div class="tips-title">نصائح التغذية والتمرين</div>
+    </div>
+    <div class="tips-body">
+      <div class="tip-item">
+        <div class="tip-dot"></div>
+        <div class="tip-text">تناول الوجبة قبل التمرين بـ <strong>60-90 دقيقة</strong> لضمان هضمها وتوفير الطاقة اللازمة.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-dot"></div>
+        <div class="tip-text">وجبة ما بعد التمرين خلال <strong>30-45 دقيقة</strong> لاستغلال نافذة التعافي وتعزيز نمو العضلات.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-dot"></div>
+        <div class="tip-text">اشرب <strong>8 أكواب ماء</strong> يومياً على الأقل. الترطيب يحسن الأداء والتعافي بشكل ملحوظ.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-dot"></div>
+        <div class="tip-text">الفواكه الطازجة مصدر رائع للفيتامينات والألياف والطاقة الطبيعية. أضفها لكل الأنظمة الغذائية.</div>
+      </div>
+      <div class="tip-item">
+        <div class="tip-dot"></div>
+        <div class="tip-text">تجنب الوجبات الثقيلة قبل النوم بـ <strong>ساعتين على الأقل</strong> للحصول على نوم عميق وتعافي أفضل.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <span class="nav-icon">🏠</span>الرئيسية
+  </a>
+  <a href="workouts.html" class="nav-item">
+    <span class="nav-icon">🏋️</span>التمارين
+  </a>
+  <a href="meals.html" class="nav-item active">
+    <span class="nav-icon">🍽️</span>الوجبات
+  </a>
+  <a href="stats.html" class="nav-item">
+    <span class="nav-icon">📊</span>الإحصائيات
+  </a>
+  <a href="profile.html" class="nav-item">
+    <span class="nav-icon">👤</span>الملف
+  </a>
+</nav>
+
+<script>
+  // ── CALORIES PER MENU ──
+  const menuCals = {
+    1: [350, 450, 400, 300, 500],
+    2: [320, 480, 350, 280, 510],
+    3: [330, 520, 400, 290, 480],
+    4: [340, 470, 350, 300, 490]
+  };
+
+  let currentMenu = 1;
+  let checkedMeals = {};
+
+  function showMenu(n) {
+    currentMenu = n;
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('menu' + i).classList.remove('active');
+      document.getElementById('btn' + i).classList.remove('active');
     }
+    document.getElementById('menu' + n).classList.add('active');
+    document.getElementById('btn' + n).classList.add('active');
+    updateMacroBar();
+    animateRing(0);
+    setTimeout(() => {
+      updateProgress();
+    }, 100);
+    // Re-animate cards
+    const cards = document.querySelectorAll('#menu' + n + ' .meal-card');
+    cards.forEach((c, i) => {
+      c.style.animation = 'none';
+      c.offsetHeight;
+      c.style.animation = `fadeUp 0.35s ease ${i * 0.06}s both`;
+    });
+  }
 
-    // إظهار وإخفاء وصف الوجبة عند النقر
-    function toggleDesc(element) {
-      const desc = element.querySelector('.description');
-      if (desc.classList.contains('hidden-desc')) {
-        desc.classList.remove('hidden-desc');
+  function updateMacroBar() {
+    const total = menuCals[currentMenu].reduce((a, b) => a + b, 0);
+    document.getElementById('totalCal').textContent = total;
+  }
+
+  function toggleCard(el) {
+    el.classList.toggle('open');
+  }
+
+  // ── RING ANIMATION ──
+  function animateRing(pct) {
+    const ring = document.getElementById('calorieRing');
+    const circumference = 220;
+    const offset = circumference - (pct / 100) * circumference;
+    ring.style.strokeDashoffset = offset;
+    document.getElementById('ringPct').textContent = Math.round(pct) + '%';
+  }
+
+  function updateProgress() {
+    // Simulate 65% of day done based on current menu
+    const rand = 55 + Math.floor(Math.random() * 20);
+    animateRing(rand);
+    document.getElementById('pbarProt').style.width = (60 + Math.random() * 30) + '%';
+    document.getElementById('pbarCarb').style.width = (50 + Math.random() * 35) + '%';
+    document.getElementById('pbarFat').style.width = (40 + Math.random() * 40) + '%';
+    document.getElementById('pbarProtVal').textContent = Math.floor(60 + Math.random() * 30) + '%';
+    document.getElementById('pbarCarbVal').textContent = Math.floor(50 + Math.random() * 35) + '%';
+    document.getElementById('pbarFatVal').textContent = Math.floor(40 + Math.random() * 40) + '%';
+  }
+
+  // ── WATER TRACKER ──
+  let waterFilled = 0;
+  const cupsGrid = document.getElementById('cupsGrid');
+  for (let i = 0; i < 8; i++) {
+    const cup = document.createElement('div');
+    cup.className = 'cup';
+    cup.innerHTML = '<span class="cup-icon">🥤</span>';
+    cup.onclick = () => {
+      if (cup.classList.contains('filled')) {
+        cup.classList.remove('filled');
+        waterFilled--;
       } else {
-        desc.classList.add('hidden-desc');
+        cup.classList.add('filled');
+        waterFilled++;
       }
-    }
-  </script>
+      document.getElementById('waterCount').textContent = `${waterFilled} / 8 أكواب`;
+      if (waterFilled === 8) showToast('🎉 ممتاز! أتممت هدف الماء اليومي!');
+    };
+    cupsGrid.appendChild(cup);
+  }
 
+  // ── TOAST ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── INIT ──
+  updateMacroBar();
+  setTimeout(updateProgress, 300);
+</script>
 </body>
 </html>
