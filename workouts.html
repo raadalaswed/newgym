@@ -2,82 +2,340 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0b" />
   <title>تمارين اليوم</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ✨ جديد : خط عربي احترافي (نفس هوية الصفحة الرئيسية) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
   <style>
-    body { background-color: #0d0d0d; color: white; padding-bottom: 60px; }
-    main { max-width: 900px; margin: auto; padding: 1rem; }
-    .section-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid #dc2626; /* Tailwind red-600 */
-      padding-bottom: 0.25rem;
+    /* ✨ UI Enhancement : نظام التصميم الموحد */
+    :root {
+      --bg: #0a0a0b;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.08);
+      --red-500: #ef4444;
+      --red-600: #dc2626;
+      --red-700: #b91c1c;
+      --red-soft: #f87171;
+      --text-main: #f4f4f5;
+      --text-dim: #a1a1aa;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --shadow-red: 0 8px 28px rgba(239, 68, 68, 0.28);
+      --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .exercise-card {
-      background-color: #1f2937; /* Tailwind gray-800 */
-      border-radius: 0.75rem;
-      padding: 1rem;
-      margin-bottom: 1rem;
+
+    * { -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding-bottom: 110px;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ✨ UI Enhancement : خلفية طبقية بتوهج أحمر خافت */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 70% 45% at 50% -5%, rgba(220, 38, 38, 0.16), transparent 60%),
+        radial-gradient(ellipse 45% 35% at 88% 108%, rgba(185, 28, 28, 0.10), transparent 60%),
+        var(--bg);
+      pointer-events: none;
+    }
+
+    main { max-width: 900px; margin: auto; padding: 1.25rem 1rem; }
+
+    /* ✨ UI Enhancement : أنيميشن */
+    @keyframes riseIn {
+      0% { opacity: 0; transform: translateY(22px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.94); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
+      50% { box-shadow: 0 0 22px 4px rgba(239, 68, 68, 0.18); }
+    }
+
+    /* ✨ UI Enhancement : Header زجاجي Sticky */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: rgba(13, 13, 15, 0.66);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      backdrop-filter: blur(20px) saturate(140%);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+      padding: 14px 20px;
       display: flex;
       align-items: center;
-      gap: 1rem;
-      box-shadow: 0 2px 8px rgb(220 38 38 / 0.5);
-      transition: transform 0.2s ease;
+      justify-content: center;
+      gap: 14px;
+      animation: riseIn 0.6s var(--ease-smooth) both;
+    }
+    .app-header .logo-badge {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(140deg, var(--red-500), var(--red-700));
+      box-shadow: var(--shadow-red), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      animation: glowPulse 4s ease-in-out infinite;
+    }
+    .app-header .logo-badge svg { width: 26px; height: 26px; stroke: #fff; }
+    .app-header .header-titles { text-align: right; }
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #ffffff, #fca5a5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.25;
+    }
+    .app-header .header-sub {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    /* ✨ UI Enhancement : عنوان القسم بشريط جانبي متوهج */
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 900;
+      margin: 0 0 1.1rem;
+      padding: 0.15rem 0.9rem 0.15rem 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-main);
+      border-bottom: none;
+    }
+    .section-title::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 1.35em;
+      border-radius: 99px;
+      background: linear-gradient(180deg, var(--red-500), var(--red-700));
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.7);
+    }
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to left, var(--border), transparent);
+    }
+
+    section { animation: riseIn 0.65s var(--ease-smooth) both; }
+    section:nth-of-type(2) { animation-delay: 0.12s; }
+
+    /* ✨ UI Enhancement : بطاقة التمرين — زجاجية بحد متدرج عند Hover */
+    .exercise-card {
+      position: relative;
+      background: linear-gradient(165deg, var(--surface-strong), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 0.9rem;
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth), border-color 0.3s ease;
+      overflow: hidden;
+    }
+    .exercise-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      right: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--red-500), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
     }
     .exercise-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 12px rgb(220 38 38 / 0.7);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(239, 68, 68, 0.18);
+      border-color: rgba(239, 68, 68, 0.3);
     }
+    .exercise-card:hover::before { opacity: 1; }
+
+    /* ✨ UI Enhancement : حالة الإنجاز (CSS فقط عبر :has — تحسين تدريجي) */
+    .exercise-card:has(input[type="checkbox"]:checked) {
+      opacity: 0.55;
+      border-color: rgba(74, 222, 128, 0.25);
+    }
+    .exercise-card:has(input[type="checkbox"]:checked) .exercise-name {
+      text-decoration: line-through;
+      text-decoration-color: rgba(239, 68, 68, 0.7);
+      color: var(--text-dim);
+    }
+
     .exercise-img {
-      width: 90px;
-      height: 90px;
-      border-radius: 0.5rem;
+      width: 86px;
+      height: 86px;
+      border-radius: var(--radius-md);
       object-fit: cover;
-      border: 2px solid #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
       flex-shrink: 0;
+      background: #18181b; /* ✨ UI Enhancement : خلفية أنيقة إن لم تُحمَّل الصورة */
+      transition: transform 0.3s var(--ease-smooth);
     }
+    .exercise-card:hover .exercise-img { transform: scale(1.05); }
+
     .exercise-info {
       flex: 1;
+      min-width: 0; /* ✨ UI Enhancement : منع Overflow للنصوص الطويلة */
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.3rem;
     }
     .exercise-name {
-      font-weight: 700;
-      font-size: 1.2rem;
+      font-weight: 800;
+      font-size: 1.06rem;
+      margin: 0;
+      line-height: 1.4;
+      transition: color 0.25s ease;
     }
     .exercise-sets {
-      color: #9ca3af; /* Tailwind gray-400 */
-      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+    /* ✨ UI Enhancement : أيقونة عدّاد صغيرة قبل الشفتات */
+    .exercise-sets::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red-500);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+      flex-shrink: 0;
+    }
+
+    /* ✨ UI Enhancement : زر الفيديو بتدرج وأيقونة تشغيل */
     .btn-video {
-      background-color: #dc2626;
+      background: linear-gradient(135deg, var(--red-500), var(--red-700));
       color: white;
       border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.375rem;
+      padding: 0.45rem 0.95rem;
+      border-radius: 99px;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      transition: transform 0.25s var(--ease-smooth), box-shadow 0.25s ease, filter 0.25s ease;
       width: max-content;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 0.82rem;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      margin-top: 2px;
+    }
+    /* ✨ UI Enhancement : مثلث تشغيل CSS خالص (بدون تعديل HTML للزر) */
+    .btn-video::before {
+      content: "";
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 5px 7px 5px 0;
+      border-color: transparent #fff transparent transparent;
+      flex-shrink: 0;
     }
     .btn-video:hover {
-      background-color: #ef4444; /* Tailwind red-500 */
+      background: linear-gradient(135deg, var(--red-600), var(--red-500));
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
+    .btn-video:active { transform: scale(0.95); }
+    .btn-video:focus-visible {
+      outline: 3px solid var(--red-soft);
+      outline-offset: 3px;
+    }
+
+    /* ✨ UI Enhancement : Checkbox مخصص أنيق (يبقى input حقيقياً وظيفياً) */
     input[type="checkbox"] {
-      width: 24px;
-      height: 24px;
-      accent-color: #dc2626;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
       flex-shrink: 0;
+      border-radius: 9px;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s var(--ease-smooth);
+      accent-color: var(--red-600);
+    }
+    input[type="checkbox"]:hover { border-color: var(--red-soft); }
+    input[type="checkbox"]:active { transform: scale(0.88); }
+    input[type="checkbox"]:checked {
+      background: linear-gradient(135deg, var(--red-500), var(--red-700));
+      border-color: var(--red-500);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+    }
+    input[type="checkbox"]:checked::before {
+      content: "";
+      width: 13px;
+      height: 7px;
+      border-right: none;
+      border-left: 2.5px solid #fff;
+      border-bottom: 2.5px solid #fff;
+      transform: rotate(-45deg) translate(1px, -2px);
+    }
+    input[type="checkbox"]:focus-visible {
+      outline: 3px solid var(--red-soft);
+      outline-offset: 3px;
     }
 
     /* Modal styles */
     #videoModal {
       position: fixed;
-      top: 0; left: 0; right:0; bottom:0;
-      background: rgba(0,0,0,0.85);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(5, 5, 6, 0.8);
+      /* ✨ UI Enhancement : Blur خلف النافذة */
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       display: none;
       justify-content: center;
       align-items: center;
@@ -86,36 +344,143 @@
     }
     #videoModal.active {
       display: flex;
+      animation: fadeIn 0.25s ease both; /* ✨ UI Enhancement */
     }
     #videoModal iframe {
       width: 100%;
       max-width: 720px;
-      height: 405px;
-      border: none;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 20px #dc2626;
+      /* ✨ UI Enhancement : نسبة عرض مرنة بدل ارتفاع ثابت (تمنع القص على الجوال) */
+      aspect-ratio: 16 / 9;
+      height: auto;
+      max-height: 80vh;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 0 40px rgba(220, 38, 38, 0.45), 0 24px 60px rgba(0, 0, 0, 0.6);
       background: black;
+      animation: popIn 0.35s var(--ease-smooth) both; /* ✨ UI Enhancement */
     }
     .close-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background: transparent;
-      border: none;
-      font-size: 2rem;
+      top: 14px;
+      right: 14px;
+      /* ✨ UI Enhancement : زر إغلاق دائري زجاجي بمنطقة لمس كبيرة */
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      font-size: 1.6rem;
       color: white;
       cursor: pointer;
       font-weight: 900;
       line-height: 1;
-      padding: 0 0.5rem;
+      padding: 0;
       user-select: none;
+      transition: background 0.25s ease, transform 0.25s var(--ease-smooth);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+    .close-btn:hover {
+      background: var(--red-600);
+      transform: rotate(90deg);
+    }
+    .close-btn:focus-visible {
+      outline: 3px solid var(--red-soft);
+      outline-offset: 3px;
+    }
+
+    /* ✨ UI Enhancement : Bottom Navigation زجاجية موحدة */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 950;
+      background: rgba(13, 13, 15, 0.78);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      backdrop-filter: blur(22px) saturate(150%);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: space-around;
+      align-items: stretch;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    }
+    .bottom-nav a {
+      flex: 1;
+      max-width: 96px;
+      min-height: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      border-radius: 14px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.66rem;
+      font-weight: 700;
+      transition: color 0.25s ease, background 0.25s ease, transform 0.2s var(--ease-smooth);
+    }
+    .bottom-nav a svg { width: 23px; height: 23px; stroke: currentColor; }
+    .bottom-nav a:hover { color: var(--red-soft); }
+    .bottom-nav a:active { transform: scale(0.9); }
+    .bottom-nav a:focus-visible {
+      outline: 2px solid var(--red-soft);
+      outline-offset: 2px;
+    }
+    .bottom-nav a.nav-active {
+      color: #fff;
+      background: linear-gradient(160deg, rgba(239, 68, 68, 0.22), rgba(185, 28, 28, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.35);
+    }
+    .bottom-nav a.nav-active::before {
+      content: "";
+      width: 18px;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--red-500);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
+      margin-bottom: 1px;
+    }
+
+    /* ✨ UI Enhancement : Responsive */
+    @media (max-width: 420px) {
+      .exercise-card { padding: 0.75rem; gap: 0.7rem; }
+      .exercise-img { width: 72px; height: 72px; }
+      .exercise-name { font-size: 0.98rem; }
+      .btn-video { font-size: 0.78rem; padding: 0.4rem 0.8rem; }
+    }
+    @media (min-width: 700px) {
+      .exercise-card { padding: 1.1rem; }
+      .exercise-img { width: 96px; height: 96px; }
+    }
+
+    /* ✨ UI Enhancement : احترام تفضيل تقليل الحركة */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header class="bg-red-600 p-4 text-center text-xl font-bold">
-    🏋️‍♂️ تمارين اليوم
+  <!-- ✨ جديد : Header زجاجي احترافي -->
+  <header class="app-header">
+    <div class="logo-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" />
+      </svg>
+    </div>
+    <div class="header-titles">
+      <h1>تمارين اليوم</h1>
+      <p class="header-sub">أنجز تمارينك وعلّم عليها أولاً بأول</p>
+    </div>
   </header>
 
   <main>
@@ -124,7 +489,7 @@
       <h2 id="upper-body-title" class="section-title">تمارين الجسم الأعلى</h2>
 
       <div class="exercise-card">
-        <img src="images/a.jpg.jpg" alt="بنج برس اعلى جهاز جالس" class="exercise-img" />
+        <img src="images/a.jpg.jpg" alt="بنج برس اعلى جهاز جالس" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">بنج برس اعلى جهاز جالس</h3>
           <p class="exercise-sets">8 ثم 8 ثم 6 ثم 6 شفتات</p>
@@ -134,7 +499,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/b.jpg" alt="بنج برس متسوي وسط" class="exercise-img" />
+        <img src="images/b.jpg" alt="بنج برس متسوي وسط" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">بنج برس متسوي وسط سمث</h3>
           <p class="exercise-sets">8 ثم 8 ثم 6 ثم 6 شفتات</p>
@@ -144,7 +509,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/c.jpg" alt="جمع اسلاك للاسفل" class="exercise-img" />
+        <img src="images/c.jpg" alt="جمع اسلاك للاسفل" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">جمع اسلاك للاسفل</h3>
           <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
@@ -154,7 +519,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/d.jpg" alt="سحب بكرة امامي عريض" class="exercise-img" />
+        <img src="images/d.jpg" alt="سحب بكرة امامي عريض" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">سحب بكرة امامي عريض</h3>
           <p class="exercise-sets">10 ثم 8 ثم 8 ثم 6 شفتات</p>
@@ -164,7 +529,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/e.jpg" alt="سحب بكرة متكا على الصدر وسط" class="exercise-img" />
+        <img src="images/e.jpg" alt="سحب بكرة متكا على الصدر وسط" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">سحب بكرة متكا على الصدر وسط</h3>
           <p class="exercise-sets">10 ثم 8 ثم 8 ثم 6 شفتات</p>
@@ -174,7 +539,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/f.jpg" alt="كيل حديد واقف" class="exercise-img" />
+        <img src="images/f.jpg" alt="كيل حديد واقف" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">كيل حديد واقف وسط</h3>
           <p class="exercise-sets">8 ثم 6 ثم 6 ثم 4 شفتات</p>
@@ -184,7 +549,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/g.jpg" alt="كيل دمبلس مترادف واقف" class="exercise-img" />
+        <img src="images/g.jpg" alt="كيل دمبلس مترادف واقف" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">كيل دمبلس مترادف واقف</h3>
           <p class="exercise-sets">8 ثم 8 ثم 8 ثم 8 شفتات</p>
@@ -194,7 +559,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/h.jpg" alt="ساعد" class="exercise-img" />
+        <img src="images/h.jpg" alt="ساعد" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">ساعد</h3>
           <p class="exercise-sets">12 ثم 12 ثم 12 ثم 12 شفتات</p>
@@ -209,7 +574,7 @@
       <h2 id="lower-body-title" class="section-title">تمارين الجسم الأسفل</h2>
 
       <div class="exercise-card">
-        <img src="images/i.jpg" alt="رفع الجذع" class="exercise-img" />
+        <img src="images/i.jpg" alt="رفع الجذع" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">رفع الجذع</h3>
           <p class="exercise-sets">25 ثم 25 ثم 25 ثم 25 شفتات</p>
@@ -219,7 +584,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/j.jpg" alt="رفع الساق" class="exercise-img" />
+        <img src="images/j.jpg" alt="رفع الساق" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">رفع الساق</h3>
           <p class="exercise-sets">25 ثم 25 ثم 25 ثم 25 شفتات</p>
@@ -229,7 +594,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/k.jpg" alt="لف الماكنة" class="exercise-img" />
+        <img src="images/k.jpg" alt="لف الماكنة" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">لف الماكنة</h3>
           <p class="exercise-sets">10 ثم 10 ثم 10 شفتات</p>
@@ -239,7 +604,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/l.jpg" alt="برس امامي وسط جالس" class="exercise-img" />
+        <img src="images/l.jpg" alt="برس امامي وسط جالس" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">برس امامي وسط جالس</h3>
           <p class="exercise-sets">8 ثم 6 ثم 6 ثم 4 شفتات</p>
@@ -249,7 +614,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/m.jpg" alt="شد بكرة للامام مفرد واقف" class="exercise-img" />
+        <img src="images/m.jpg" alt="شد بكرة للامام مفرد واقف" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">شد بكرة للامام مفرد واقف</h3>
           <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
@@ -259,7 +624,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/n.jpg" alt="شد جهاز خلفي" class="exercise-img" />
+        <img src="images/n.jpg" alt="شد جهاز خلفي" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">شد جهاز خلفي</h3>
           <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
@@ -269,7 +634,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/o.jpg" alt="تراي جهاز زد جالس ضيق" class="exercise-img" />
+        <img src="images/o.jpg" alt="تراي جهاز زد جالس ضيق" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">تراي جهاز زد جالس ضيق</h3>
           <p class="exercise-sets">8 ثم 8 ثم 6 ثم 6 شفتات</p>
@@ -279,7 +644,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/p.jpg" alt="تراي دمبلس اليدين معا" class="exercise-img" />
+        <img src="images/p.jpg" alt="تراي دمبلس اليدين معا" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">تراي دمبلس اليدين معا</h3>
           <p class="exercise-sets">8 ثم 8 ثم 8 ثم 8 شفتات</p>
@@ -289,7 +654,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/q.jpg" alt="تراي سيقان امامي" class="exercise-img" />
+        <img src="images/q.jpg" alt="تراي سيقان امامي" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">تراي سيقان امامي</h3>
           <p class="exercise-sets">10 ثم 10 ثم 10 ثم 10 شفتات</p>
@@ -299,7 +664,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/r.jpg" alt="هاك باك وسط" class="exercise-img" />
+        <img src="images/r.jpg" alt="هاك باك وسط" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">هاك باك وسط</h3>
           <p class="exercise-sets">8 ثم 8 ثم 8 ثم 8 شفتات</p>
@@ -309,7 +674,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/s.jpg" alt="كولف" class="exercise-img" />
+        <img src="images/s.jpg" alt="كولف" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">كولف</h3>
           <p class="exercise-sets">20 ثم 20 ثم 20 ثم 20 شفتات</p>
@@ -319,7 +684,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/t.jpg" alt="ساعد" class="exercise-img" />
+        <img src="images/t.jpg" alt="ساعد" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">ساعد</h3>
           <p class="exercise-sets">12 ثم 12 ثم 12 ثم 12 شفتات</p>
@@ -329,7 +694,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/u.jpg" alt="طحن جهاز" class="exercise-img" />
+        <img src="images/u.jpg" alt="طحن جهاز" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">طحن جهاز</h3>
           <p class="exercise-sets">30 ثم 30 ثم 30 ثم 30 شفتات</p>
@@ -339,7 +704,7 @@
       </div>
 
       <div class="exercise-card">
-        <img src="images/v.jpg" alt="لف الماكنة" class="exercise-img" />
+        <img src="images/v.jpg" alt="لف الماكنة" class="exercise-img" loading="lazy" />
         <div class="exercise-info">
           <h3 class="exercise-name">لف الماكنة</h3>
           <p class="exercise-sets">30 ثم 30 ثم 30 ثم 30 شفتات</p>
@@ -356,12 +721,38 @@
   </div>
 
   <!-- شريط التنقل -->
-  <nav class="bg-red-600 fixed bottom-0 w-full flex justify-around p-3 text-2xl">
-    <a href="index.html" class="text-white" aria-label="الرئيسية">🏠</a>
-    <a href="workouts.html" class="text-white" aria-label="التمارين">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white" aria-label="الوجبات">🍽️</a>
-    <a href="stats.html" class="text-white" aria-label="الإحصائيات">📊</a>
-    <a href="profile.html" class="text-white" aria-label="الملف الشخصي">👤</a>
+  <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+    <a href="index.html" aria-label="الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10.5 12 3l9 7.5M5 9.5V21h5v-6h4v6h5V9.5" />
+      </svg>
+      <span>الرئيسية</span>
+    </a>
+    <a href="workouts.html" class="nav-active" aria-label="التمارين" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" />
+      </svg>
+      <span>التمارين</span>
+    </a>
+    <a href="meals.html" aria-label="الوجبات">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M6 3v18M17 3c-1.7 0-3 2.2-3 5s1.3 5 3 5v8M17 3v10" />
+      </svg>
+      <span>الوجبات</span>
+    </a>
+    <a href="stats.html" aria-label="الإحصائيات">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 20V10M10 20V4M16 20v-8M22 20H2" />
+      </svg>
+      <span>الإحصائيات</span>
+    </a>
+    <a href="profile.html" aria-label="الملف الشخصي">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" />
+      </svg>
+      <span>الملف الشخصي</span>
+    </a>
   </nav>
 
   <script>
