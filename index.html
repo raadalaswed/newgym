@@ -2,17 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0b" />
   <title>تماريني</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ✨ جديد : خط عربي احترافي -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
   <style>
+    /* ✨ UI Enhancement : نظام التصميم — متغيرات موحدة */
+    :root {
+      --bg: #0a0a0b;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-strong: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.08);
+      --red-500: #ef4444;
+      --red-600: #dc2626;
+      --red-700: #b91c1c;
+      --red-soft: #f87171;
+      --text-main: #f4f4f5;
+      --text-dim: #a1a1aa;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --shadow-red: 0 8px 28px rgba(239, 68, 68, 0.28);
+      --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { -webkit-tap-highlight-color: transparent; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      background-color: #0d0d0d;
-      color: white;
-      padding-bottom: 80px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      padding-bottom: 110px;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      padding-top: 60px; /* مساحة لعبارة رعد الأسود */
+      padding-top: 42px; /* مساحة لعبارة رعد الأسود */
+      min-height: 100vh;
+      overflow-x: hidden; /* ✨ UI Enhancement : منع أي Overflow أفقي */
+    }
+
+    /* ✨ UI Enhancement : خلفية طبقية بتوهج أحمر خافت (هوية Premium) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 70% 45% at 50% -5%, rgba(220, 38, 38, 0.16), transparent 60%),
+        radial-gradient(ellipse 45% 35% at 88% 108%, rgba(185, 28, 28, 0.10), transparent 60%),
+        var(--bg);
+      pointer-events: none;
     }
 
     /* أنيميشن بسيطة للعبارة */
@@ -27,56 +72,397 @@
       }
     }
 
+    /* ✨ UI Enhancement : أنيميشن دخول للعناصر */
+    @keyframes riseIn {
+      0% { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
+      50% { box-shadow: 0 0 22px 4px rgba(239, 68, 68, 0.18); }
+    }
+
     .footer-text {
       animation: fadeInUp 1.5s ease forwards;
       opacity: 0;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #f87171; /* نفس لون الأحمر الفاتح */
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.4px;
+      color: var(--red-soft);
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       text-align: center;
-      background: #111;
-      padding: 10px 0;
+      /* ✨ UI Enhancement : شريط زجاجي بدل الخلفية الصلبة */
+      background: rgba(17, 17, 19, 0.72);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(248, 113, 113, 0.18);
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
       z-index: 1000;
-      box-shadow: 0 2px 5px rgba(248,113,113,0.5);
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
       user-select: none;
     }
 
-    /* تأثير أزرار متقدمة */
+    /* ✨ UI Enhancement : Header زجاجي Sticky احترافي */
+    .app-header {
+      position: sticky;
+      top: 42px;
+      z-index: 900;
+      background: rgba(13, 13, 15, 0.66);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      backdrop-filter: blur(20px) saturate(140%);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      animation: riseIn 0.6s var(--ease-smooth) both;
+    }
+    .app-header .logo-badge {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(140deg, var(--red-500), var(--red-700));
+      box-shadow: var(--shadow-red), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      animation: glowPulse 4s ease-in-out infinite;
+    }
+    .app-header .logo-badge svg {
+      width: 26px;
+      height: 26px;
+      stroke: #fff;
+    }
+    .app-header .header-titles { text-align: right; }
+    .app-header h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      background: linear-gradient(90deg, #ffffff, #fca5a5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
+    }
+    .app-header .header-sub {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    /* ✨ UI Enhancement : بطاقة الترحيب */
+    .welcome-card {
+      position: relative;
+      max-width: 640px;
+      margin: 0 auto 30px;
+      padding: 26px 22px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(160deg, var(--surface-strong), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      animation: riseIn 0.7s var(--ease-smooth) 0.1s both;
+      text-align: center;
+    }
+    .welcome-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.55), transparent 40%, transparent 60%, rgba(185, 28, 28, 0.45));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .welcome-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 14px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      animation: scaleIn 0.6s var(--ease-smooth) 0.25s both;
+    }
+    .welcome-icon svg { width: 30px; height: 30px; stroke: var(--red-soft); }
+    .welcome-title {
+      font-size: clamp(1.6rem, 5vw, 2.1rem);
+      font-weight: 900;
+      margin: 0 0 8px;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .welcome-title .accent { color: var(--red-500); }
+    .welcome-desc {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.8;
+    }
+
+    /* ✨ UI Enhancement : عنوان القسم الصغير */
+    .section-label {
+      max-width: 640px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      letter-spacing: 0.6px;
+      animation: riseIn 0.7s var(--ease-smooth) 0.2s both;
+    }
+    .section-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to left, var(--border), transparent);
+    }
+    .section-label .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red-500);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+      flex-shrink: 0;
+    }
+
+    /* تأثير أزرار متقدمة — تم تطويرها إلى بطاقات Premium */
     .btn-modern {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.5);
-      transition: all 0.3s ease;
-      font-weight: 700;
-      font-size: 1.1rem;
+      /* ✨ UI Enhancement : بطاقة زجاجية بحدود متدرجة بدل الزر المصمت */
+      position: relative;
+      background: linear-gradient(165deg, var(--surface-strong), rgba(255, 255, 255, 0.02));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      transition: transform 0.35s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth), border-color 0.35s ease;
+      font-weight: 800;
+      font-size: 1.05rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 15px;
-      padding: 1.5rem 1rem;
+      justify-content: flex-start;
+      align-items: flex-start;
+      text-align: right;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.15rem 1.05rem;
       cursor: pointer;
       user-select: none;
+      color: var(--text-main);
+      text-decoration: none;
+      overflow: hidden;
+      min-height: 158px;
     }
+    /* ✨ UI Enhancement : حد متدرج يظهر عند Hover */
+    .btn-modern::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, var(--red-500), transparent 45%, transparent 55%, var(--red-700));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    /* ✨ UI Enhancement : Ripple بسيط عند الضغط (CSS فقط) */
+    .btn-modern::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.35);
+      transform: translate(50%, -50%) scale(0);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.5s var(--ease-smooth), opacity 0.6s ease;
+    }
+    .btn-modern:active::after {
+      transform: translate(50%, -50%) scale(30);
+      opacity: 1;
+      transition: transform 0.4s var(--ease-smooth), opacity 0.1s ease;
+    }
+    .btn-modern:active { transform: scale(0.97); }
 
     .btn-modern:hover {
-      background: linear-gradient(135deg, #b91c1c, #ef4444);
-      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.7);
-      transform: scale(1.05);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5), var(--shadow-red);
+      border-color: rgba(239, 68, 68, 0.35);
+      background: linear-gradient(165deg, rgba(239, 68, 68, 0.10), rgba(255, 255, 255, 0.02));
     }
+    .btn-modern:hover::before { opacity: 1; }
 
-    .btn-modern span.emoji {
-      font-size: 2.5rem;
-      margin-bottom: 0.4rem;
+    /* ✨ UI Enhancement : حاوية الأيقونة داخل البطاقة */
+    .btn-modern .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(140deg, var(--red-500), var(--red-700));
+      box-shadow: var(--shadow-red), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      margin-bottom: 0.8rem;
+      transition: transform 0.35s var(--ease-smooth);
     }
+    .btn-modern:hover .card-icon { transform: scale(1.08) rotate(-4deg); }
+    .btn-modern .card-icon svg { width: 26px; height: 26px; stroke: #fff; }
+
+    /* ✨ UI Enhancement : نصوص البطاقة */
+    .btn-modern .card-title {
+      font-size: 1.08rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+    .btn-modern .card-desc {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-top: 3px;
+      line-height: 1.6;
+    }
+    .btn-modern .card-arrow {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      transition: background 0.3s ease, transform 0.35s var(--ease-smooth);
+    }
+    .btn-modern .card-arrow svg { width: 15px; height: 15px; stroke: var(--text-dim); transition: stroke 0.3s ease; }
+    .btn-modern:hover .card-arrow {
+      background: var(--red-600);
+      transform: translateX(-4px);
+    }
+    .btn-modern:hover .card-arrow svg { stroke: #fff; }
 
     /* تظليل عند التركيز لتجربة أفضل */
     .btn-modern:focus-visible {
-      outline: 3px solid #f87171;
+      outline: 3px solid var(--red-soft);
       outline-offset: 3px;
+    }
+
+    /* ✨ UI Enhancement : دخول متدرّج للبطاقات */
+    .cards-grid > .btn-modern { animation: riseIn 0.65s var(--ease-smooth) both; }
+    .cards-grid > .btn-modern:nth-child(1) { animation-delay: 0.25s; }
+    .cards-grid > .btn-modern:nth-child(2) { animation-delay: 0.33s; }
+    .cards-grid > .btn-modern:nth-child(3) { animation-delay: 0.41s; }
+    .cards-grid > .btn-modern:nth-child(4) { animation-delay: 0.49s; }
+
+    /* ✨ UI Enhancement : Bottom Navigation زجاجية */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 950;
+      background: rgba(13, 13, 15, 0.78);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      backdrop-filter: blur(22px) saturate(150%);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: space-around;
+      align-items: stretch;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    }
+    .bottom-nav a {
+      flex: 1;
+      max-width: 96px;
+      min-height: 56px; /* منطقة لمس كبيرة */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      border-radius: 14px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.66rem;
+      font-weight: 700;
+      transition: color 0.25s ease, background 0.25s ease, transform 0.2s var(--ease-smooth);
+    }
+    .bottom-nav a svg { width: 23px; height: 23px; stroke: currentColor; transition: transform 0.25s var(--ease-smooth); }
+    .bottom-nav a:hover { color: var(--red-soft); }
+    .bottom-nav a:active { transform: scale(0.9); }
+    .bottom-nav a:active svg { transform: scale(0.88); }
+    .bottom-nav a:focus-visible {
+      outline: 2px solid var(--red-soft);
+      outline-offset: 2px;
+    }
+    /* حالة الصفحة الحالية */
+    .bottom-nav a.nav-active {
+      color: #fff;
+      background: linear-gradient(160deg, rgba(239, 68, 68, 0.22), rgba(185, 28, 28, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.35);
+    }
+    .bottom-nav a.nav-active::before {
+      content: "";
+      width: 18px;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--red-500);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
+      margin-bottom: 1px;
+    }
+
+    /* ✨ UI Enhancement : Responsive
+       (تخصيص مضاعف .cards-grid.cards-grid لضمان الأولوية على أدوات Tailwind
+        الأصلية gap-6 و max-w-md دون حذفها) */
+    .cards-grid.cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (min-width: 480px) { .cards-grid.cards-grid { gap: 18px; } }
+    @media (min-width: 900px) {
+      .cards-grid.cards-grid { max-width: 980px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .welcome-card, .section-label { max-width: 980px; }
+    }
+    @media (max-width: 360px) {
+      .btn-modern { min-height: 148px; padding: 1rem 0.9rem 0.95rem; }
+      .btn-modern .card-title { font-size: 0.98rem; }
+    }
+
+    /* ✨ UI Enhancement : احترام تفضيل تقليل الحركة */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -84,41 +470,133 @@
 
   <p class="footer-text">تم صنع الموقع بواسطة رعد الأسود</p>
 
-  <header class="bg-red-700 p-5 text-center text-2xl font-extrabold tracking-wide drop-shadow-lg shadow-red-700/80">
-    💪 تماريني
+  <!-- ✨ جديد : Header زجاجي احترافي -->
+  <header class="app-header">
+    <div class="logo-badge" aria-hidden="true">
+      <!-- أيقونة دمبل -->
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" />
+      </svg>
+    </div>
+    <div class="header-titles">
+      <h1>تماريني</h1>
+      <p class="header-sub">رفيقك اليومي للياقة والقوة</p>
+    </div>
   </header>
 
   <main class="p-6">
-    <h1 class="text-3xl font-extrabold mb-5 text-center text-red-400 drop-shadow-md">مرحباً بك في تطبيق تماريني</h1>
-    <p class="mb-8 text-center text-gray-300 text-lg">اختر القسم الذي تريد التوجه إليه لتبدأ رحلتك نحو اللياقة والعضلات</p>
+    <!-- ✨ جديد : بطاقة ترحيب -->
+    <section class="welcome-card" aria-labelledby="welcome-heading">
+      <div class="welcome-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2 4.5 13.5H11l-1 8.5L18.5 10H12l1-8Z" />
+        </svg>
+      </div>
+      <h2 id="welcome-heading" class="welcome-title">مرحباً بك في <span class="accent">تماريني</span></h2>
+      <p class="welcome-desc">اختر القسم الذي تريد التوجه إليه لتبدأ رحلتك نحو اللياقة والعضلات</p>
+    </section>
 
-    <div class="grid grid-cols-2 gap-6 max-w-md mx-auto">
+    <!-- ✨ جديد : عنوان الأقسام -->
+    <div class="section-label"><span class="dot" aria-hidden="true"></span>الأقسام الرئيسية</div>
+
+    <div class="cards-grid grid grid-cols-2 gap-6 max-w-md mx-auto">
       <a href="workouts.html" class="btn-modern" aria-label="التمارين">
-        <span class="emoji">🏋️‍♂️</span>
-        التمارين
+        <!-- ✨ جديد : أيقونة SVG ووصف وسهم -->
+        <span class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" />
+          </svg>
+        </span>
+        <span class="card-title">التمارين</span>
+        <span class="card-desc">برامج وحركات لكل عضلة</span>
+        <span class="card-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </span>
       </a>
+
       <a href="meals.html" class="btn-modern" aria-label="الوجبات">
-        <span class="emoji">🍽️</span>
-        الوجبات
+        <span class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M6 3v18M17 3c-1.7 0-3 2.2-3 5s1.3 5 3 5v8M17 3v10" />
+          </svg>
+        </span>
+        <span class="card-title">الوجبات</span>
+        <span class="card-desc">تغذية تدعم أهدافك</span>
+        <span class="card-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </span>
       </a>
+
       <a href="stats.html" class="btn-modern" aria-label="الإحصائيات">
-        <span class="emoji">📊</span>
-        الإحصائيات
+        <span class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20V10M10 20V4M16 20v-8M22 20H2" />
+          </svg>
+        </span>
+        <span class="card-title">الإحصائيات</span>
+        <span class="card-desc">تابع تقدّمك بالأرقام</span>
+        <span class="card-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </span>
       </a>
+
       <a href="profile.html" class="btn-modern" aria-label="الملف الشخصي">
-        <span class="emoji">👤</span>
-        الملف الشخصي
+        <span class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" />
+          </svg>
+        </span>
+        <span class="card-title">الملف الشخصي</span>
+        <span class="card-desc">بياناتك وأهدافك</span>
+        <span class="card-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </span>
       </a>
     </div>
   </main>
 
   <!-- شريط التنقل -->
-  <nav class="bg-red-700 fixed bottom-0 w-full flex justify-around p-4 text-3xl drop-shadow-lg shadow-red-700/70">
-    <a href="index.html" class="text-white hover:text-red-300 transition" aria-label="الرئيسية">🏠</a>
-    <a href="workouts.html" class="text-white hover:text-red-300 transition" aria-label="التمارين">🏋️‍♂️</a>
-    <a href="meals.html" class="text-white hover:text-red-300 transition" aria-label="الوجبات">🍽️</a>
-    <a href="stats.html" class="text-white hover:text-red-300 transition" aria-label="الإحصائيات">📊</a>
-    <a href="profile.html" class="text-white hover:text-red-300 transition" aria-label="الملف الشخصي">👤</a>
+  <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+    <a href="index.html" class="nav-active" aria-label="الرئيسية" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 10.5 12 3l9 7.5M5 9.5V21h5v-6h4v6h5V9.5" />
+      </svg>
+      <span>الرئيسية</span>
+    </a>
+    <a href="workouts.html" aria-label="التمارين">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" />
+      </svg>
+      <span>التمارين</span>
+    </a>
+    <a href="meals.html" aria-label="الوجبات">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 3v7a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V3M6 3v18M17 3c-1.7 0-3 2.2-3 5s1.3 5 3 5v8M17 3v10" />
+      </svg>
+      <span>الوجبات</span>
+    </a>
+    <a href="stats.html" aria-label="الإحصائيات">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 20V10M10 20V4M16 20v-8M22 20H2" />
+      </svg>
+      <span>الإحصائيات</span>
+    </a>
+    <a href="profile.html" aria-label="الملف الشخصي">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" />
+      </svg>
+      <span>الملف الشخصي</span>
+    </a>
   </nav>
 
 </body>
